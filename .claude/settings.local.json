@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for f:*)",
+      "Bash(do)",
+      "Bash(sed -i '' 's|<h4 class=\"\"footer__heading\"\">Каталог</h4>|<h4 class=\"\"footer__heading\"\"><a href=\"\"catalog.html\"\" style=\"\"color:inherit;text-decoration:none;\"\">Каталог<\\\\/a><\\\\/h4>|g' \"$f\")",
+      "Bash(done)",
+      "Bash(__NEW_LINE_32aa94a38e587054__ cp:*)",
+      "Bash(__NEW_LINE_32aa94a38e587054__ echo:*)",
+      "Bash(__NEW_LINE_245ae171c77858e1__ rm:*)",
+      "Bash(__NEW_LINE_245ae171c77858e1__ echo:*)"
+    ]
+  }
+}
