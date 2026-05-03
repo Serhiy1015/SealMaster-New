@@ -8,7 +8,9 @@
       "Bash(__NEW_LINE_32aa94a38e587054__ cp:*)",
       "Bash(__NEW_LINE_32aa94a38e587054__ echo:*)",
       "Bash(__NEW_LINE_245ae171c77858e1__ rm:*)",
-      "Bash(__NEW_LINE_245ae171c77858e1__ echo:*)"
+      "Bash(__NEW_LINE_245ae171c77858e1__ echo:*)",
+      "Bash(grep -v \"^Кільце ущільнююче\\\\|^Манжета армована\\\\|^Ущільнення V-ring\\\\|^$\" /Users/sk1015/Downloads/сайт/goods.txt)",
+      "Bash(grep -v \"^[[:space:]]*$\")"
     ]
   }
 }

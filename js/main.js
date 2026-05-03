@@ -8,6 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  /* ---------- Mobile footer CTA button ---------- */
+  const footerInner = document.querySelector('.footer__inner');
+  if (footerInner) {
+    const cta = document.createElement('div');
+    cta.className = 'footer__mobile-cta';
+    cta.innerHTML = '<a href="tel:+380966852191" class="btn btn--primary btn--lg" style="width:100%;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.5 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 013.41 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.91 7.91a16 16 0 006.18 6.18l.77-.77a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg> Зателефонувати</a>';
+    footerInner.prepend(cta);
+  }
+
   /* ---------- Sticky header shadow + hide on scroll (mobile) ---------- */
   const header = document.getElementById('header');
   let lastScrollY = window.scrollY;
@@ -143,10 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>`).join('');
   }
 
-  /* ---------- Load products once → category cards + catalog ---------- */
+  /* ---------- Load products once → category cards + catalog + hero ---------- */
   loadProducts().then(products => {
     buildCategoryCards(products);
     buildCatalog(products);
+    startHeroSlideshow(products);
   });
 
   /* ---------- Product Modal ---------- */
@@ -280,7 +290,6 @@ function parseCSV(text) {
     .filter(row => row.id)
     .map(row => {
       const obj = { ...row, id: parseInt(row.id, 10) || 0 };
-      // Якщо image — це просто Google Drive ID (без http), будуємо URL автоматично
       if (obj.image && !obj.image.startsWith('http')) {
         obj.image = `https://drive.google.com/thumbnail?id=${obj.image}&sz=w800`;
       }
@@ -292,7 +301,7 @@ async function loadProducts() {
   const url = typeof SHEETS_CSV_URL !== 'undefined' ? SHEETS_CSV_URL : '';
   if (!url) return typeof PRODUCTS !== 'undefined' ? PRODUCTS : [];
 
-  const CACHE_KEY = 'products_csv_v1';
+  const CACHE_KEY = 'products_csv_v2';
   const CACHE_TTL = 2 * 60 * 1000; // 2 хвилини
 
   // Спробуємо взяти з sessionStorage
@@ -562,6 +571,44 @@ function openProductModal(product) {
   modal.hidden = false;
   document.body.style.overflow = 'hidden';
   document.getElementById('productModalClose')?.focus();
+}
+
+/* ============================================================
+   HERO SLIDESHOW
+   ============================================================ */
+function startHeroSlideshow(products) {
+  const img = document.querySelector('.hero__img');
+  if (!img) return;
+
+  const srcs = shuffleArray(products.filter(p => p.image).map(p => p.image));
+  if (!srcs.length) return;
+
+  const placeholder = document.querySelector('.hero__img-placeholder');
+  if (placeholder) placeholder.style.display = 'none';
+
+  let idx = 0;
+  let timer = null;
+
+  const switchTo = (src) => {
+    img.style.opacity = '0';
+    setTimeout(() => {
+      img.src = src;
+      img.onload  = () => { img.style.opacity = '1'; };
+      img.onerror = () => { advance(); };
+    }, 350);
+  };
+
+  const advance = () => {
+    idx = (idx + 1) % srcs.length;
+    switchTo(srcs[idx]);
+  };
+
+  switchTo(srcs[0]);
+  timer = setInterval(advance, 4500);
+
+  // Зупиняємо при наведенні на hero-зображення
+  img.addEventListener('mouseenter', () => clearInterval(timer));
+  img.addEventListener('mouseleave', () => { timer = setInterval(advance, 4500); });
 }
 
 /* ============================================================
