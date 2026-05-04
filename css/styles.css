@@ -304,7 +304,7 @@ h1, h2, h3, h4 {
 
 .nav__dropdown {
   position: absolute;
-  top: calc(100% + 3px);
+  top: 100%;
   left: 0;
   background: var(--clr-surface2);
   border: 1px solid var(--clr-border);
@@ -316,16 +316,20 @@ h1, h2, h3, h4 {
   visibility: hidden;
   pointer-events: none;
   transform: translateY(-4px);
-  transition: opacity 0.18s ease, visibility 0.18s ease, transform 0.18s ease;
+  /* затримка 200мс тільки при закритті */
+  transition: opacity 0.18s ease 0.2s, visibility 0.18s ease 0.2s, transform 0.18s ease 0.2s;
   z-index: 200;
   box-shadow: 0 8px 32px rgba(0,0,0,0.6);
 }
 
 @media (min-width: 901px) {
-  .nav__item--dropdown { padding-bottom: 3px; }
+  /* невидимий місток між хедером і dropdown щоб не закривався при переході */
+  .nav__item--dropdown { padding-bottom: 8px; }
   .nav__item--dropdown:hover .nav__dropdown,
   .nav__item--dropdown.open .nav__dropdown {
     opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0);
+    /* при відкритті — без затримки */
+    transition-delay: 0s;
   }
 }
 
@@ -353,6 +357,196 @@ h1, h2, h3, h4 {
   background: rgba(232,160,32,0.07);
 }
 .nav__dropdown-link--active { color: var(--clr-accent); font-weight: 600; }
+
+/* ---- SUBCATEGORY TREE in dropdown ---- */
+.nav__dropdown-row {
+  display: flex;
+  align-items: center;
+}
+.nav__dropdown-row .nav__dropdown-link { flex: 1; }
+
+.nav__sub-toggle {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 14px;
+  color: var(--clr-text-dim);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  transition: color 0.15s;
+}
+.nav__sub-toggle:hover { color: var(--clr-accent); }
+.nav__sub-toggle svg { transition: transform 0.2s ease; }
+.nav__dropdown-item--open .nav__sub-toggle svg { transform: rotate(180deg); }
+
+/* Desktop: flyout праворуч при наведенні */
+@media (min-width: 901px) {
+  .nav__sub-toggle  { display: none; }
+  .nav__sub2-toggle { display: none; }
+
+  .nav__dropdown-item--has-sub { position: relative; }
+
+  .nav__dropdown-item--has-sub > .nav__dropdown-row::after {
+    content: '›';
+    position: absolute;
+    right: 14px;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--clr-text-dim);
+    pointer-events: none;
+    transition: color 0.15s;
+  }
+  .nav__dropdown-item--has-sub.flyout-open > .nav__dropdown-row::after {
+    color: var(--clr-accent);
+  }
+
+  .nav__dropdown-sub {
+    position: absolute;
+    left: calc(100% - 4px);
+    top: -6px;
+    min-width: 210px;
+    list-style: none;
+    margin: 0;
+    padding: 6px 0;
+    background: var(--clr-surface2);
+    border: 1px solid var(--clr-border);
+    border-top: 3px solid var(--clr-accent);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-6px);
+    transition: opacity 0.12s ease, visibility 0.12s ease, transform 0.12s ease;
+    z-index: 300;
+  }
+  .nav__dropdown-item--has-sub.flyout-open .nav__dropdown-sub {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+
+  /* L2: flyout всередині L1 */
+  .nav__dropdown-sub-item { position: relative; list-style: none; }
+
+  .nav__dropdown-sub-item--has-sub > .nav__dropdown-sub-row::after {
+    content: '›';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: var(--clr-text-dim);
+    pointer-events: none;
+    transition: color 0.15s;
+  }
+  .nav__dropdown-sub-item--has-sub.flyout2-open > .nav__dropdown-sub-row::after {
+    color: var(--clr-accent);
+  }
+
+  .nav__dropdown-sub-sub {
+    position: absolute;
+    left: calc(100% - 4px);
+    top: -6px;
+    min-width: 210px;
+    list-style: none;
+    margin: 0;
+    padding: 6px 0;
+    background: var(--clr-surface2);
+    border: 1px solid var(--clr-border);
+    border-top: 3px solid var(--clr-accent);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.65);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-6px);
+    transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+    z-index: 400;
+  }
+  .nav__dropdown-sub-item--has-sub.flyout2-open .nav__dropdown-sub-sub {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+}
+
+/* Mobile: розкривається вниз при кліку */
+@media (max-width: 900px) {
+  .nav__dropdown-sub {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: var(--clr-surface);
+  }
+  .nav__dropdown-item--open .nav__dropdown-sub { max-height: 1200px; }
+
+  .nav__dropdown-sub-sub {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 16px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+    background: var(--clr-surface);
+  }
+  .nav__dropdown-sub-item--has-sub.nav__dropdown-sub-item--open .nav__dropdown-sub-sub {
+    max-height: 600px;
+  }
+  .nav__sub2-toggle {
+    background: none; border: none;
+    color: var(--clr-text-dim);
+    padding: 8px 10px; cursor: pointer;
+    flex-shrink: 0;
+  }
+  .nav__dropdown-sub-item--has-sub.nav__dropdown-sub-item--open .nav__sub2-toggle svg {
+    transform: rotate(90deg);
+  }
+  .nav__sub2-toggle svg { transition: transform 0.2s; }
+}
+
+.nav__dropdown-sub-row {
+  display: flex;
+  align-items: center;
+}
+.nav__dropdown-sub-row .nav__dropdown-sub-link {
+  flex: 1;
+  padding-right: 28px; /* місце для стрілки › */
+}
+
+.nav__dropdown-sub-link {
+  display: block;
+  padding: 9px 18px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--clr-text);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 0.1s, border-color 0.1s, background 0.1s;
+}
+.nav__dropdown-sub-link:hover {
+  color: var(--clr-accent);
+  border-left-color: var(--clr-accent);
+  background: rgba(232,160,32,0.07);
+}
+
+/* L2 дочірні елементи — трохи менший шрифт */
+.nav__dropdown-sub-link--sm {
+  font-size: 0.76rem;
+  padding: 9px 18px;
+  color: var(--clr-text);
+  text-transform: none;
+  letter-spacing: 0.03em;
+}
+.nav__dropdown-sub-link--sm:hover { color: var(--clr-accent); }
 
 /* ---- SECTION UTILITIES ---- */
 .section-header { margin-bottom: 8px; }
@@ -1370,6 +1564,25 @@ a.product-card__cat:hover { text-decoration: underline; }
 .subtype-tab:hover { background: var(--clr-surface2); color: var(--clr-accent); }
 .subtype-tab--active { background: var(--clr-accent); color: #1a1008; }
 .subtype-tab--active:hover { color: #1a1008; }
+
+/* Назва активної L1-групи */
+.subtype-l1-label {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--clr-accent);
+  margin-bottom: 8px;
+}
+
+/* Другий ярус (серії) */
+.subtype-tabs--l2 {
+  border-left: 3px solid var(--clr-accent);
+  padding-left: 12px;
+  margin-bottom: 28px;
+  gap: 2px;
+}
 
 /* ---- SKELETON LOADERS ---- */
 @keyframes skeleton-pulse {

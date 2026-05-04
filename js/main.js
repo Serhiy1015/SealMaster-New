@@ -185,13 +185,135 @@ function buildDropdown() {
 
   const activeCat = typeof CATALOG_CATEGORY !== 'undefined' ? CATALOG_CATEGORY : null;
 
-  dropdownEl.innerHTML = CATEGORIES.map(cat => `
-    <li class="nav__dropdown-item">
-      <a href="${cat.page || '#'}" class="nav__dropdown-link${activeCat === cat.id ? ' nav__dropdown-link--active' : ''}">${escHtml(cat.name)}</a>
-    </li>
-  `).join('');
+  dropdownEl.innerHTML = CATEGORIES.map(cat => {
+    const subs = (typeof SUBCATEGORIES !== 'undefined' && SUBCATEGORIES[cat.id]) || null;
+    const isTwoLevel = subs && subs[0] && subs[0].children;
+    const isActive = activeCat === cat.id;
 
-  // Підсвічуємо "Каталог" якщо ми на сторінці категорії
+    const subHTML = subs ? `<ul class="nav__dropdown-sub">${subs.map(sub => {
+      if (isTwoLevel && sub.children?.length) {
+        return `<li class="nav__dropdown-sub-item nav__dropdown-sub-item--has-sub">
+          <div class="nav__dropdown-sub-row">
+            <a href="${cat.page}#${sub.id}" class="nav__dropdown-sub-link">${escHtml(sub.name)}</a>
+            <button class="nav__sub2-toggle" aria-label="Розкрити">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+          <ul class="nav__dropdown-sub-sub">${sub.children.map(ch =>
+            `<li><a href="${cat.page}#${ch.id}" class="nav__dropdown-sub-link nav__dropdown-sub-link--sm">${escHtml(ch.name)}</a></li>`
+          ).join('')}</ul>
+        </li>`;
+      }
+      return `<li><a href="${cat.page}#${sub.id}" class="nav__dropdown-sub-link">${escHtml(sub.name)}</a></li>`;
+    }).join('')}</ul>` : '';
+
+    return `
+      <li class="nav__dropdown-item${subs ? ' nav__dropdown-item--has-sub' : ''}${isActive ? ' nav__dropdown-item--open' : ''}">
+        <div class="nav__dropdown-row">
+          <a href="${cat.page || '#'}" class="nav__dropdown-link${isActive ? ' nav__dropdown-link--active' : ''}">${escHtml(cat.name)}</a>
+          ${subs ? `<button class="nav__sub-toggle" aria-label="Розкрити підкатегорії">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>` : ''}
+        </div>
+        ${subHTML}
+      </li>`;
+  }).join('');
+
+  // Мобільний тогл L1 (клік на стрілку)
+  dropdownEl.querySelectorAll('.nav__sub-toggle').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      btn.closest('.nav__dropdown-item--has-sub').classList.toggle('nav__dropdown-item--open');
+    });
+  });
+
+  // Мобільний тогл L2
+  dropdownEl.querySelectorAll('.nav__sub2-toggle').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      btn.closest('.nav__dropdown-sub-item--has-sub').classList.toggle('nav__dropdown-sub-item--open');
+    });
+  });
+
+  // Десктоп: flyout без затримок
+  // Відкривається при наведенні на елемент, закривається коли мишка виходить з панелі
+  if (window.matchMedia('(min-width: 901px)').matches) {
+
+    const fitFlyout = (panel, trigger) => {
+      const triggerTop = trigger.getBoundingClientRect().top;
+      const panelH = panel.offsetHeight;
+      const vh = window.innerHeight;
+      const margin = 8;
+
+      let top = -6;
+      if (triggerTop + top + panelH > vh - margin) {
+        top = vh - margin - panelH - triggerTop;
+      }
+      if (triggerTop + top < margin) {
+        top = margin - triggerTop;
+      }
+
+      panel.style.top    = top + 'px';
+      panel.style.bottom = 'auto';
+    };
+
+    // L1: відкриваємо при наведенні, закриваємо всі при виході з dropdown
+    dropdownEl.querySelectorAll('.nav__dropdown-item').forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        dropdownEl.querySelectorAll('.nav__dropdown-item--has-sub').forEach(other => {
+          other.classList.remove('flyout-open');
+        });
+        if (item.classList.contains('nav__dropdown-item--has-sub')) {
+          const sub = item.querySelector('.nav__dropdown-sub');
+          if (sub) fitFlyout(sub, item);
+          item.classList.add('flyout-open');
+        }
+      });
+    });
+    dropdownEl.addEventListener('mouseleave', () => {
+      dropdownEl.querySelectorAll('.nav__dropdown-item--has-sub').forEach(item => {
+        item.classList.remove('flyout-open');
+      });
+    });
+
+    // L2: те саме всередині кожної L1-панелі
+    dropdownEl.querySelectorAll('.nav__dropdown-sub').forEach(sub => {
+      sub.querySelectorAll('.nav__dropdown-sub-item--has-sub').forEach(subItem => {
+        subItem.addEventListener('mouseenter', () => {
+          sub.querySelectorAll('.nav__dropdown-sub-item--has-sub').forEach(other => {
+            if (other !== subItem) other.classList.remove('flyout2-open');
+          });
+          const sub2 = subItem.querySelector('.nav__dropdown-sub-sub');
+          if (sub2) fitFlyout(sub2, subItem);
+          subItem.classList.add('flyout2-open');
+        });
+      });
+      sub.addEventListener('mouseleave', () => {
+        sub.querySelectorAll('.nav__dropdown-sub-item--has-sub').forEach(si => {
+          si.classList.remove('flyout2-open');
+        });
+      });
+    });
+
+  }
+
+  // Закриваємо всі рівні меню при кліку на будь-яку підкатегорію (L1 і L2)
+  dropdownEl.querySelectorAll('.nav__dropdown-sub-link').forEach(link => {
+    link.addEventListener('click', () => {
+      const nav = document.getElementById('nav');
+      const burger = document.getElementById('burger');
+      const catItem = document.getElementById('navCatalogItem');
+      if (nav) nav.classList.remove('open');
+      if (burger) { burger.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); }
+      if (catItem) catItem.classList.remove('open');
+      dropdownEl.querySelectorAll('.flyout-open').forEach(el => el.classList.remove('flyout-open'));
+      dropdownEl.querySelectorAll('.flyout2-open').forEach(el => el.classList.remove('flyout2-open'));
+      dropdownEl.querySelectorAll('.nav__dropdown-item--open').forEach(el => el.classList.remove('nav__dropdown-item--open'));
+      dropdownEl.querySelectorAll('.nav__dropdown-sub-item--open').forEach(el => el.classList.remove('nav__dropdown-sub-item--open'));
+      document.body.style.overflow = '';
+    });
+  });
+
   if (activeCat) {
     document.getElementById('navCatalogItem')?.classList.add('nav__item--active');
   }
@@ -340,22 +462,87 @@ async function buildCatalog(preloadedProducts) {
 
   const products    = preloadedProducts !== undefined ? preloadedProducts : await loadProducts();
   const catId       = typeof CATALOG_CATEGORY !== 'undefined' ? CATALOG_CATEGORY : null;
-  const subcats     = (catId && typeof SUBCATEGORIES !== 'undefined') ? SUBCATEGORIES[catId] : null;
+  const _rawSubcats = (catId && typeof SUBCATEGORIES !== 'undefined') ? SUBCATEGORIES[catId] : null;
+  const subcats     = (_rawSubcats && _rawSubcats.length) ? _rawSubcats : null;
   const filtersEl   = document.getElementById('catalogFilters');
   const featuredProducts = !catId ? shuffleArray(products).slice(0, 8) : null;
 
-  // ── Сторінка з підтипами (напр. kilcia.html) ───────────────────────
+  // ── Сторінка з підтипами ───────────────────────────────────────────
   if (subcats) {
-    // Вставити рядок табів перед сіткою товарів
+    const isTwoLevel = subcats[0] && subcats[0].children;
+
+    if (isTwoLevel) {
+      // ── Два яруси (наприклад gidro.html) ──────────────────────────
+      const hashId = location.hash.slice(1);
+
+      // Визначаємо початкову групу і дочірній елемент з хешу
+      let activeGroup = subcats[0];
+      let activeChild = subcats[0].children[0]?.id;
+      for (const group of subcats) {
+        if (group.id === hashId) { activeGroup = group; activeChild = group.children[0]?.id; break; }
+        const child = group.children?.find(c => c.id === hashId);
+        if (child) { activeGroup = group; activeChild = hashId; break; }
+      }
+
+      const l1Label = document.createElement('div');
+      l1Label.className = 'subtype-l1-label';
+      gridEl.parentNode.insertBefore(l1Label, gridEl);
+
+      const l2Bar = document.createElement('div');
+      l2Bar.className = 'subtype-tabs subtype-tabs--l2';
+      gridEl.parentNode.insertBefore(l2Bar, gridEl);
+
+      const renderL1 = () => {
+        l1Label.textContent = activeGroup.name;
+      };
+
+      const renderL2 = () => {
+        l2Bar.innerHTML = '';
+        (activeGroup.children || []).forEach(child => {
+          const btn = document.createElement('button');
+          btn.className = 'subtype-tab' + (child.id === activeChild ? ' subtype-tab--active' : '');
+          btn.dataset.subtype = child.id;
+          btn.textContent = child.short || child.name;
+          btn.addEventListener('click', () => {
+            activeChild = child.id;
+            renderL2(); renderProducts();
+          });
+          l2Bar.appendChild(btn);
+        });
+      };
+
+      gridEl.className = 'catalog__grid';
+      renderL1(); renderL2(); renderProducts();
+
+      function renderProducts() {
+        const filtered = products.filter(p => p.categoryId === catId && p.subtype === activeChild);
+        renderGrid(filtered);
+      }
+
+      window.addEventListener('hashchange', () => {
+        const h = location.hash.slice(1);
+        for (const group of subcats) {
+          if (group.id === h) { activeGroup = group; activeChild = group.children[0]?.id; break; }
+          const child = group.children?.find(c => c.id === h);
+          if (child) { activeGroup = group; activeChild = h; break; }
+        }
+        renderL1(); renderL2(); renderProducts();
+      });
+
+      return;
+    }
+
+    // ── Один ярус (наприклад kilcia.html) ─────────────────────────
     const tabsBar = document.createElement('div');
     tabsBar.className = 'subtype-tabs';
     gridEl.parentNode.insertBefore(tabsBar, gridEl);
 
-    let activeSubtype = subcats[0].id;
+    const hashId = location.hash.slice(1);
+    let activeSubtype = subcats.find(s => s.id === hashId) ? hashId : subcats[0].id;
 
-    subcats.forEach((sub, i) => {
+    subcats.forEach(sub => {
       const btn = document.createElement('button');
-      btn.className = 'subtype-tab' + (i === 0 ? ' subtype-tab--active' : '');
+      btn.className = 'subtype-tab' + (sub.id === activeSubtype ? ' subtype-tab--active' : '');
       btn.dataset.subtype = sub.id;
       btn.textContent = sub.name;
       btn.addEventListener('click', () => {
@@ -374,6 +561,17 @@ async function buildCatalog(preloadedProducts) {
       const filtered = products.filter(p => p.categoryId === catId && p.subtype === activeSubtype);
       renderGrid(filtered);
     }
+
+    window.addEventListener('hashchange', () => {
+      const newHash = location.hash.slice(1);
+      const sub = subcats.find(s => s.id === newHash);
+      if (!sub) return;
+      tabsBar.querySelectorAll('.subtype-tab').forEach(b => b.classList.remove('subtype-tab--active'));
+      tabsBar.querySelector(`[data-subtype="${newHash}"]`)?.classList.add('subtype-tab--active');
+      activeSubtype = newHash;
+      renderProducts();
+    });
+
     return;
   }
 
