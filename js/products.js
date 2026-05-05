@@ -184,11 +184,11 @@ const SUBCATEGORIES = {
    *  В Google Sheets колонка subtype = id підкатегорії.
    */
   statychni: [
-    { id: 'st_k82', name: 'УЩІЛЬНЕННЯ K82' },
-    { id: 'st_k83', name: 'УЩІЛЬНЕННЯ K83' },
-    { id: 'st_k84', name: 'УЩІЛЬНЕННЯ K84' },
-    { id: 'st_k85', name: 'УЩІЛЬНЕННЯ K85' },
-    { id: 'st_k86', name: 'УЩІЛЬНЕННЯ K86' },
+    { id: 'st_k82', name: 'УЩІЛЬНЕННЯ K82', short: 'K82' },
+    { id: 'st_k83', name: 'УЩІЛЬНЕННЯ K83', short: 'K83' },
+    { id: 'st_k84', name: 'УЩІЛЬНЕННЯ K84', short: 'K84' },
+    { id: 'st_k85', name: 'УЩІЛЬНЕННЯ K85', short: 'K85' },
+    { id: 'st_k86', name: 'УЩІЛЬНЕННЯ K86', short: 'K86' },
   ],
 
   kilcia: [
@@ -203,18 +203,18 @@ const SUBCATEGORIES = {
   ],
 
   kompresory: [
-        { id: 'komp_usch',  name: 'КОМСПРЕСОРНІ УЩІЛЬНЕННЯ',  },
-        { id: 'brs',  name: 'ВТУЛКИ КОМПРЕСОРНІ BRS',  }
+    { id: 'komp_usch', name: 'КОМПРЕСОРНІ УЩІЛЬНЕННЯ', },
+    { id: 'brs',       name: 'ВТУЛКИ КОМПРЕСОРНІ BRS',        },
   ],
 
   komplektuiuchi: [
-        { id: 'kompl_pidsh',  name: 'ПІДШИПНИКИ ШС',  },
-        { id: 'kompl_buks',  name: 'БУКСИ',  },
-        { id: 'kompl_k18',  name: 'ПОРШНІ К18',  },
-        { id: 'kompl_vuho_shtok',  name: 'ВУХО ГЦ ШТОК',  },
-        { id: 'kompl_vuho_truba',  name: 'ВУХО ГЦ ТРУБА',  },
-        { id: 'kompl_khrom',  name: 'ШТОКИ ХРОМОВАНІ',  },
-        { id: 'kompl_trubu',  name: 'ТРУБИ ХОНІНГОВАНІ',  },
+    { id: 'kompl_pidsh',      name: 'ПІДШИПНИКИ ШС',   short: 'Підшипники ШС' },
+    { id: 'kompl_buks',       name: 'БУКСИ',            short: 'Букси'         },
+    { id: 'kompl_k18',        name: 'ПОРШНІ К18',       short: 'К18'           },
+    { id: 'kompl_vuho_shtok', name: 'ВУХО ГЦ ШТОК',    short: 'Вухо шток'     },
+    { id: 'kompl_vuho_truba', name: 'ВУХО ГЦ ТРУБА',   short: 'Вухо труба'    },
+    { id: 'kompl_khrom',      name: 'ШТОКИ ХРОМОВАНІ', short: 'Штоки'         },
+    { id: 'kompl_trubu',      name: 'ТРУБИ ХОНІНГОВАНІ', short: 'Труби'        },
   ]
 };
 

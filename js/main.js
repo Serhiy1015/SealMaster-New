@@ -511,7 +511,7 @@ async function buildCatalog(preloadedProducts) {
         });
       };
 
-      gridEl.className = 'catalog__grid';
+      gridEl.className = 'catalog__grid catalog__grid--list';
       renderL1(); renderL2(); renderProducts();
 
       function renderProducts() {
@@ -544,7 +544,7 @@ async function buildCatalog(preloadedProducts) {
       const btn = document.createElement('button');
       btn.className = 'subtype-tab' + (sub.id === activeSubtype ? ' subtype-tab--active' : '');
       btn.dataset.subtype = sub.id;
-      btn.textContent = sub.name;
+      btn.textContent = sub.short || sub.name;
       btn.addEventListener('click', () => {
         tabsBar.querySelectorAll('.subtype-tab').forEach(b => b.classList.remove('subtype-tab--active'));
         btn.classList.add('subtype-tab--active');
@@ -679,7 +679,7 @@ function productCardHTML(p) {
           : `<p class="product-card__cat">${escHtml(catName)}</p>`
         }
         <h3 class="product-card__name">${escHtml(p.name)}</h3>
-        <p class="product-card__desc">${escHtml(p.desc)}</p>
+        ${p.desc ? `<p class="product-card__desc">${escHtml(p.desc)}</p>` : ''}
         <div class="product-card__footer">
           ${price}
         </div>
