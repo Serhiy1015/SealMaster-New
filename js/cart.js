@@ -28,6 +28,16 @@ function cartAdd(product) {
   cartSave(cart);
   cartUpdateBadge();
   cartUpdateButtons();
+  cartBounce();
+}
+
+function cartBounce() {
+  const btn = document.querySelector('.cart-btn');
+  if (!btn) return;
+  btn.classList.remove('cart-btn--bounce');
+  void btn.offsetWidth; // скидає анімацію щоб спрацювала знову
+  btn.classList.add('cart-btn--bounce');
+  btn.addEventListener('animationend', () => btn.classList.remove('cart-btn--bounce'), { once: true });
 }
 function cartRemove(id) {
   cartSave(cartGet().filter(i => i.id !== id));
