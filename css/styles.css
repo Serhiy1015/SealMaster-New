@@ -1036,6 +1036,8 @@ a.product-card__cat:hover { text-decoration: underline; }
   min-width: 0;
 }
 
+.catalog__grid--list .product-card__price { font-size: 1.1rem; }
+
 .catalog__grid--list .product-card__footer {
   margin-top: 0;
   padding-top: 0;
