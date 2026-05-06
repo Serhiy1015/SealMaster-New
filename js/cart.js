@@ -11,8 +11,8 @@
    5. Вставте обидва значення нижче
    ============================================================ */
 
-const TELEGRAM_BOT_TOKEN = '';  // наприклад: '7123456789:AAF...'
-const TELEGRAM_CHAT_ID   = '';  // наприклад: '123456789'
+const TELEGRAM_BOT_TOKEN = '8687340496:AAFfUeCIQhbSrvt5Bjnp67aRduG1s-zu0Jo';
+const TELEGRAM_CHAT_ID   = '597089199';
 
 /* ── Storage ─────────────────────────────────────────────── */
 function cartGet() {
