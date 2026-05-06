@@ -642,8 +642,13 @@ async function buildCatalog(preloadedProducts) {
     gridEl.querySelectorAll('.product-card__add[data-id]').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
-        const product = products.find(p => p.id === parseInt(btn.dataset.id, 10));
-        if (product && typeof cartAdd === 'function') cartAdd(product);
+        const id = parseInt(btn.dataset.id, 10);
+        if (btn.classList.contains('product-card__add--done')) {
+          if (typeof cartRemove === 'function') cartRemove(id);
+        } else {
+          const product = products.find(p => p.id === id);
+          if (product && typeof cartAdd === 'function') cartAdd(product);
+        }
       });
     });
 
