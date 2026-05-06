@@ -1005,9 +1005,11 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 
 .catalog__grid--list .product-card__img-wrap {
-  width: 160px;
+  width: 80px;
+  height: 80px;
   flex-shrink: 0;
-  aspect-ratio: unset;
+  aspect-ratio: 1 / 1;
+  align-self: center;
 }
 
 .catalog__grid--list .product-card__body {
@@ -1039,7 +1041,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   padding-top: 0;
   border-top: none;
   flex-shrink: 0;
-  min-width: 120px;
+  width: 220px;
   justify-content: flex-end;
 }
 
