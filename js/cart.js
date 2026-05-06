@@ -27,14 +27,29 @@ function cartAdd(product) {
   else cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
   cartSave(cart);
   cartUpdateBadge();
-  cartFlash(product.id);
+  cartUpdateButtons();
 }
 function cartRemove(id) {
   cartSave(cartGet().filter(i => i.id !== id));
   cartUpdateBadge();
   cartRenderItems();
+  cartUpdateButtons();
 }
-function cartClear() { localStorage.removeItem('sm_cart'); cartUpdateBadge(); }
+function cartChangeQty(id, delta) {
+  const cart = cartGet();
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty = (item.qty || 1) + delta;
+  if (item.qty <= 0) { cartRemove(id); return; }
+  cartSave(cart);
+  cartUpdateBadge();
+  cartRenderItems();
+}
+function cartClear() {
+  localStorage.removeItem('sm_cart');
+  cartUpdateBadge();
+  cartUpdateButtons();
+}
 
 /* ── Badge ───────────────────────────────────────────────── */
 function cartUpdateBadge() {
@@ -45,16 +60,16 @@ function cartUpdateBadge() {
   });
 }
 
-/* ── Flash кнопки "В кошик" ─────────────────────────────── */
-function cartFlash(productId) {
-  const btn = document.querySelector(`.product-card__add[data-id="${productId}"]`);
-  if (!btn) return;
-  btn.textContent = '✓';
-  btn.classList.add('product-card__add--done');
-  setTimeout(() => {
-    btn.textContent = 'В кошик';
-    btn.classList.remove('product-card__add--done');
-  }, 1400);
+/* ── Синхронізація кнопок "В кошик" ─────────────────────── */
+function cartUpdateButtons() {
+  const cart = cartGet();
+  document.querySelectorAll('.product-card__add[data-id]').forEach(btn => {
+    const id = parseInt(btn.dataset.id, 10);
+    const inCart = cart.some(i => i.id === id);
+    const span = btn.querySelector('span');
+    if (span) span.textContent = inCart ? 'В кошику' : 'В кошик';
+    btn.classList.toggle('product-card__add--done', inCart);
+  });
 }
 
 /* ── Drawer open/close ───────────────────────────────────── */
@@ -87,12 +102,19 @@ function cartRenderItems() {
       <div class="cart-item__name">${item.name}</div>
       <div class="cart-item__right">
         <span class="cart-item__price">${fmt(item.price)}</span>
-        <span class="cart-item__qty">× ${item.qty || 1}</span>
+        <div class="cart-item__qty-wrap">
+          <button class="cart-qty-btn" data-id="${item.id}" data-delta="-1">−</button>
+          <span class="cart-qty-num">${item.qty || 1}</span>
+          <button class="cart-qty-btn" data-id="${item.id}" data-delta="1">+</button>
+        </div>
         <button class="cart-item__del" data-id="${item.id}" aria-label="Видалити">×</button>
       </div>
     </div>`).join('');
   el.querySelectorAll('.cart-item__del').forEach(btn => {
     btn.addEventListener('click', () => cartRemove(+btn.dataset.id));
+  });
+  el.querySelectorAll('.cart-qty-btn').forEach(btn => {
+    btn.addEventListener('click', () => cartChangeQty(+btn.dataset.id, +btn.dataset.delta));
   });
 }
 
