@@ -1887,6 +1887,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   cursor: pointer;
   color: #000;
   padding: 8px 16px;
+  align-self: center;
   display: flex;
   align-items: center;
   gap: 7px;
