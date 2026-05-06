@@ -200,6 +200,7 @@ function initCart() {
     );
 
     if (ok) {
+      submitBtn.textContent = 'Відправлено';
       cartClear();
       cartRenderItems();
       form.hidden = true;
