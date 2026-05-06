@@ -638,6 +638,14 @@ async function buildCatalog(preloadedProducts) {
         if (product) openProductModal(product);
       });
     });
+
+    gridEl.querySelectorAll('.product-card__add[data-id]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const product = products.find(p => p.id === parseInt(btn.dataset.id, 10));
+        if (product && typeof cartAdd === 'function') cartAdd(product);
+      });
+    });
   }
 }
 
@@ -682,6 +690,7 @@ function productCardHTML(p) {
         ${p.desc ? `<p class="product-card__desc">${escHtml(p.desc)}</p>` : ''}
         <div class="product-card__footer">
           ${price}
+          <button class="product-card__add" data-id="${p.id}">В кошик</button>
         </div>
       </div>
     </article>
