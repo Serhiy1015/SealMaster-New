@@ -183,7 +183,7 @@ function initCart() {
             <span class="cart-field__err" id="cartErrName"></span>
           </div>
           <div class="cart-field">
-            <input type="tel" name="phone" placeholder="Номер телефону * (0XXXXXXXXX)" class="cart-input" autocomplete="tel">
+            <input type="tel" name="phone" placeholder="Номер телефону *" class="cart-input" autocomplete="tel">
             <span class="cart-field__err" id="cartErrPhone"></span>
           </div>
           <textarea name="comment" placeholder="Коментар (необов'язково)" class="cart-input cart-textarea"></textarea>
