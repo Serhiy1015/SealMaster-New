@@ -178,9 +178,15 @@ function initCart() {
       <div id="cartItems" class="cart-drawer__items"></div>
       <div class="cart-drawer__foot">
         <form id="cartForm" class="cart-form">
-          <input type="text"  name="name"    placeholder="Ваше ім'я *"        required class="cart-input">
-          <input type="tel"   name="phone"   placeholder="Номер телефону *"    required class="cart-input">
-          <textarea           name="comment" placeholder="Коментар (необов'язково)" class="cart-input cart-textarea"></textarea>
+          <div class="cart-field">
+            <input type="text" name="name" placeholder="Ваше ім'я *" class="cart-input" autocomplete="name">
+            <span class="cart-field__err" id="cartErrName"></span>
+          </div>
+          <div class="cart-field">
+            <input type="tel" name="phone" placeholder="Номер телефону * (0XXXXXXXXX)" class="cart-input" autocomplete="tel">
+            <span class="cart-field__err" id="cartErrPhone"></span>
+          </div>
+          <textarea name="comment" placeholder="Коментар (необов'язково)" class="cart-input cart-textarea"></textarea>
           <button type="submit" class="btn btn--primary btn--full">Підтвердити замовлення</button>
         </form>
         <div id="cartSuccess" class="cart-success" hidden>
@@ -199,15 +205,41 @@ function initCart() {
   document.getElementById('cartForm').addEventListener('submit', async e => {
     e.preventDefault();
     const form = e.target;
+
+    const nameVal  = form.name.value.trim();
+    const phoneVal = form.phone.value.trim();
+    const nameErr  = document.getElementById('cartErrName');
+    const phoneErr = document.getElementById('cartErrPhone');
+    let valid = true;
+
+    if (nameVal.length < 2) {
+      nameErr.textContent = "Введіть ім'я (мінімум 2 символи)";
+      form.name.classList.add('cart-input--error');
+      valid = false;
+    } else {
+      nameErr.textContent = '';
+      form.name.classList.remove('cart-input--error');
+    }
+
+    const digits = phoneVal.replace(/\D/g, '');
+    const phoneOk = (digits.startsWith('380') && digits.length === 12) ||
+                    (digits.startsWith('0')   && digits.length === 10);
+    if (!phoneOk) {
+      phoneErr.textContent = 'Введіть коректний номер (наприклад: 0961234567)';
+      form.phone.classList.add('cart-input--error');
+      valid = false;
+    } else {
+      phoneErr.textContent = '';
+      form.phone.classList.remove('cart-input--error');
+    }
+
+    if (!valid) return;
+
     const submitBtn = form.querySelector('[type=submit]');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Відправляємо...';
 
-    const ok = await cartSend(
-      form.name.value.trim(),
-      form.phone.value.trim(),
-      form.comment.value.trim(),
-    );
+    const ok = await cartSend(nameVal, phoneVal, form.comment.value.trim());
 
     if (ok) {
       submitBtn.textContent = 'Відправлено';
@@ -220,6 +252,12 @@ function initCart() {
       submitBtn.textContent = 'Підтвердити замовлення';
       alert('Помилка відправки. Зателефонуйте нам: +380966852191');
     }
+  });
+
+  /* Прибираємо помилку при введенні */
+  document.getElementById('cartForm').addEventListener('input', e => {
+    const input = e.target.closest('.cart-input');
+    if (input) input.classList.remove('cart-input--error');
   });
 
   document.getElementById('cartSuccessClose').addEventListener('click', () => {

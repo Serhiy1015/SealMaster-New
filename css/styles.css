@@ -2138,6 +2138,16 @@ a.product-card__cat:hover { text-decoration: underline; }
 
 /* Форма в дравері */
 .cart-form { display: flex; flex-direction: column; gap: 10px; }
+.cart-field { display: flex; flex-direction: column; gap: 4px; }
+.cart-field__err {
+  font-size: 0.75rem;
+  color: var(--clr-accent2);
+  min-height: 1em;
+  padding-left: 2px;
+}
+.cart-input--error {
+  border-color: var(--clr-accent2) !important;
+}
 .cart-input {
   background: var(--clr-surface2);
   border: 1px solid var(--clr-border);
