@@ -93,11 +93,10 @@ const SUBCATEGORIES = {
       id: 'budoznymachi',
       name: 'Брудознімачі',
       children: [
-        { id: 'bud_k05',  name: 'БРУДОЗНІМАЧІ K05',  short: 'K05'  },
+        { id: 'bud_k09_k05', name: 'БРУДОЗНІМАЧІ K09/K05/WWS', short: 'K09/K05/WWS' },
         { id: 'bud_k06',  name: 'БРУДОЗНІМАЧІ K06',  short: 'K06'  },
         { id: 'bud_k07',  name: 'БРУДОЗНІМАЧІ K07',  short: 'K07'  },
-        { id: 'bud_k09',  name: 'БРУДОЗНІМАЧІ K09',  short: 'K09'  },
-        { id: 'bud_k10',  name: 'БРУДОЗНІМАЧІ K010', short: 'K010' },
+        { id: 'bud_k10',  name: 'БРУДОЗНІМАЧІ K10', short: 'K10' },
         { id: 'bud_k101', name: 'БРУДОЗНІМАЧІ K101', short: 'K101' },
         { id: 'bud_k107', name: 'БРУДОЗНІМАЧІ K107', short: 'K107' },
         { id: 'bud_k11',  name: 'БРУДОЗНІМАЧІ K11',  short: 'K11'  },
