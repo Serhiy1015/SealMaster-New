@@ -1631,6 +1631,40 @@ a.product-card__cat:hover { text-decoration: underline; }
 .subtype-tab--active:hover { color: #1a1008; }
 
 /* Назва активної L1-групи */
+.catalog__grid--l1groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2px;
+}
+
+.l1-group-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px;
+  background: var(--clr-surface);
+  text-decoration: none;
+  color: var(--clr-heading);
+  border-left: 3px solid transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.l1-group-card:hover {
+  background: var(--clr-surface2);
+  border-left-color: var(--clr-accent);
+  color: var(--clr-accent);
+}
+.l1-group-card__name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+.l1-group-card svg { flex-shrink: 0; opacity: 0.5; }
+.l1-group-card:hover svg { opacity: 1; }
+
 .subtype-l1-label {
   font-family: var(--font-display);
   font-size: 1rem;

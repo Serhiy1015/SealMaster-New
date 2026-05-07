@@ -473,16 +473,8 @@ async function buildCatalog(preloadedProducts) {
 
     if (isTwoLevel) {
       // ── Два яруси (наприклад gidro.html) ──────────────────────────
-      const hashId = location.hash.slice(1);
-
-      // Визначаємо початкову групу і дочірній елемент з хешу
-      let activeGroup = subcats[0];
-      let activeChild = subcats[0].children[0]?.id;
-      for (const group of subcats) {
-        if (group.id === hashId) { activeGroup = group; activeChild = group.children[0]?.id; break; }
-        const child = group.children?.find(c => c.id === hashId);
-        if (child) { activeGroup = group; activeChild = hashId; break; }
-      }
+      let activeGroup = null;
+      let activeChild = null;
 
       const l1Label = document.createElement('div');
       l1Label.className = 'subtype-l1-label';
@@ -492,8 +484,33 @@ async function buildCatalog(preloadedProducts) {
       l2Bar.className = 'subtype-tabs subtype-tabs--l2';
       gridEl.parentNode.insertBefore(l2Bar, gridEl);
 
-      const renderL1 = () => {
+      const resolveHash = (h) => {
+        for (const group of subcats) {
+          if (group.id === h) return { group, child: group.children[0]?.id };
+          const child = group.children?.find(c => c.id === h);
+          if (child) return { group, child: h };
+        }
+        return null;
+      };
+
+      const showL1Groups = () => {
+        l1Label.hidden = true;
+        l2Bar.hidden = true;
+        gridEl.className = 'catalog__grid catalog__grid--l1groups';
+        gridEl.innerHTML = subcats.map(group => `
+          <a href="#${group.id}" class="l1-group-card">
+            <span class="l1-group-card__name">${escHtml(group.name)}</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>`).join('');
+      };
+
+      const showGroup = () => {
+        l1Label.hidden = false;
+        l2Bar.hidden = false;
         l1Label.textContent = activeGroup.name;
+        gridEl.className = 'catalog__grid catalog__grid--list';
+        renderL2();
+        renderProducts();
       };
 
       const renderL2 = () => {
@@ -511,22 +528,26 @@ async function buildCatalog(preloadedProducts) {
         });
       };
 
-      gridEl.className = 'catalog__grid catalog__grid--list';
-      renderL1(); renderL2(); renderProducts();
-
       function renderProducts() {
         const filtered = products.filter(p => p.categoryId === catId && p.subtype === activeChild);
         renderGrid(filtered);
       }
 
+      const hashId = location.hash.slice(1);
+      const initial = hashId ? resolveHash(hashId) : null;
+      if (initial) {
+        activeGroup = initial.group;
+        activeChild = initial.child;
+        showGroup();
+      } else {
+        showL1Groups();
+      }
+
       window.addEventListener('hashchange', () => {
         const h = location.hash.slice(1);
-        for (const group of subcats) {
-          if (group.id === h) { activeGroup = group; activeChild = group.children[0]?.id; break; }
-          const child = group.children?.find(c => c.id === h);
-          if (child) { activeGroup = group; activeChild = h; break; }
-        }
-        renderL1(); renderL2(); renderProducts();
+        if (!h) { activeGroup = null; activeChild = null; showL1Groups(); return; }
+        const resolved = resolveHash(h);
+        if (resolved) { activeGroup = resolved.group; activeChild = resolved.child; showGroup(); }
       });
 
       return;
