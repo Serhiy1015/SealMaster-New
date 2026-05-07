@@ -357,25 +357,14 @@ function buildCategoryCards(products = []) {
 
   gridEl.innerHTML = CATEGORIES.map(cat => {
     const firstImg = (products.find(p => p.categoryId === cat.id && p.image) || {}).image || '';
-    const rawSubs = (typeof SUBCATEGORIES !== 'undefined' && SUBCATEGORIES[cat.id]) || null;
-    const subs = rawSubs && rawSubs.length ? rawSubs : null;
-
-    const subLinksHTML = subs ? `
-      <div class="cat-card__subs">
-        ${subs.map(sub => `<a href="${cat.page}#${sub.id}" class="cat-card__sub-link">${escHtml(sub.name)}</a>`).join('')}
-      </div>` : '';
-
     return `
-      <div class="cat-card">
-        <a href="${cat.page || '#'}" class="cat-card__main">
-          <div class="cat-card__preview">
-            ${firstImg ? `<img class="cat-card__img" src="${escHtml(firstImg)}" alt="${escHtml(cat.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />` : ''}
-            <div class="cat-card__icon" style="${firstImg ? 'display:none' : 'display:flex'}">${CAT_ICONS[cat.id] || ''}</div>
-          </div>
-          <span class="cat-card__name">${escHtml(cat.name)}</span>
-        </a>
-        ${subLinksHTML}
-      </div>
+      <a href="${cat.page || '#'}" class="cat-card">
+        <div class="cat-card__preview">
+          ${firstImg ? `<img class="cat-card__img" src="${escHtml(firstImg)}" alt="${escHtml(cat.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />` : ''}
+          <div class="cat-card__icon" style="${firstImg ? 'display:none' : 'display:flex'}">${CAT_ICONS[cat.id] || ''}</div>
+        </div>
+        <span class="cat-card__name">${escHtml(cat.name)}</span>
+      </a>
     `;
   }).join('');
 }
