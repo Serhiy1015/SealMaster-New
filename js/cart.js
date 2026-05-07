@@ -206,19 +206,21 @@ function initCart() {
     e.preventDefault();
     const form = e.target;
 
-    const nameVal  = form.name.value.trim();
-    const phoneVal = form.phone.value.trim();
-    const nameErr  = document.getElementById('cartErrName');
-    const phoneErr = document.getElementById('cartErrPhone');
+    const nameInput  = form.querySelector('input[name="name"]');
+    const phoneInput = form.querySelector('input[name="phone"]');
+    const nameVal    = nameInput.value.trim();
+    const phoneVal   = phoneInput.value.trim();
+    const nameErr    = document.getElementById('cartErrName');
+    const phoneErr   = document.getElementById('cartErrPhone');
     let valid = true;
 
     if (nameVal.length < 2) {
       nameErr.textContent = "Введіть ім'я (мінімум 2 символи)";
-      form.name.classList.add('cart-input--error');
+      nameInput.classList.add('cart-input--error');
       valid = false;
     } else {
       nameErr.textContent = '';
-      form.name.classList.remove('cart-input--error');
+      nameInput.classList.remove('cart-input--error');
     }
 
     const digits = phoneVal.replace(/\D/g, '');
@@ -226,11 +228,11 @@ function initCart() {
                     (digits.startsWith('0')   && digits.length === 10);
     if (!phoneOk) {
       phoneErr.textContent = 'Введіть коректний номер (наприклад: 0961234567)';
-      form.phone.classList.add('cart-input--error');
+      phoneInput.classList.add('cart-input--error');
       valid = false;
     } else {
       phoneErr.textContent = '';
-      form.phone.classList.remove('cart-input--error');
+      phoneInput.classList.remove('cart-input--error');
     }
 
     if (!valid) return;
@@ -239,7 +241,7 @@ function initCart() {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Відправляємо...';
 
-    const ok = await cartSend(nameVal, phoneVal, form.comment.value.trim());
+    const ok = await cartSend(nameVal, phoneVal, form.querySelector('textarea[name="comment"]').value.trim());
 
     if (ok) {
       submitBtn.textContent = 'Відправлено';
