@@ -1648,7 +1648,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--clr-text-dim);
+  color: var(--clr-heading);
   white-space: nowrap;
 }
 .dim-filter__field {
@@ -1660,6 +1660,21 @@ a.product-card__cat:hover { text-decoration: underline; }
   font-weight: 700;
   text-transform: uppercase;
   color: var(--clr-text-dim);
+}
+.dim-filter__dim {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  gap: 2px;
+}
+.dim-filter__hint {
+  font-size: 0.6rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--clr-text-dim);
+  white-space: nowrap;
 }
 .dim-filter__input {
   background: var(--clr-surface2);

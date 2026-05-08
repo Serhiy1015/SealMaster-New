@@ -500,13 +500,16 @@ async function buildCatalog(preloadedProducts) {
       filterEl.innerHTML = `
         <span class="dim-filter__label">Пошук за розміром:</span>
         <label class="dim-filter__field">
-          <span>d</span><input class="dim-filter__input" id="dimFd" type="number" min="0" step="0.1" placeholder="—">
+          <span class="dim-filter__dim">d<span class="dim-filter__hint">вн. діам.</span></span>
+          <input class="dim-filter__input" id="dimFd" type="number" min="0" step="0.1" placeholder="—">
         </label>
         <label class="dim-filter__field">
-          <span>D</span><input class="dim-filter__input" id="dimFD" type="number" min="0" step="0.1" placeholder="—">
+          <span class="dim-filter__dim">D<span class="dim-filter__hint">зовн. діам.</span></span>
+          <input class="dim-filter__input" id="dimFD" type="number" min="0" step="0.1" placeholder="—">
         </label>
         <label class="dim-filter__field">
-          <span>h</span><input class="dim-filter__input" id="dimFh" type="number" min="0" step="0.1" placeholder="—">
+          <span class="dim-filter__dim">h<span class="dim-filter__hint">висота</span></span>
+          <input class="dim-filter__input" id="dimFh" type="number" min="0" step="0.1" placeholder="—">
         </label>
         <button class="dim-filter__reset" id="dimReset" title="Скинути">✕</button>`;
       gridEl.parentNode.insertBefore(filterEl, gridEl);
