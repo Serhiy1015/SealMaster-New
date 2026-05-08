@@ -1667,6 +1667,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   align-items: center;
   line-height: 1;
   gap: 2px;
+  color: var(--clr-accent);
 }
 .dim-filter__hint {
   font-size: 0.6rem;
