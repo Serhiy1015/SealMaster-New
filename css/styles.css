@@ -1631,6 +1631,63 @@ a.product-card__cat:hover { text-decoration: underline; }
 .subtype-tab--active:hover { color: #1a1008; }
 
 /* Назва активної L1-групи */
+/* ---- DIM FILTER ---- */
+.dim-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 14px 20px;
+  background: var(--clr-surface);
+  border-left: 3px solid var(--clr-accent);
+  margin-bottom: 20px;
+}
+.dim-filter__label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--clr-text-dim);
+  white-space: nowrap;
+}
+.dim-filter__field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--clr-text-dim);
+}
+.dim-filter__input {
+  background: var(--clr-surface2);
+  border: 1px solid var(--clr-border);
+  color: var(--clr-heading);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: 5px 10px;
+  border-radius: var(--radius);
+  width: 80px;
+  outline: none;
+  transition: border-color var(--transition);
+}
+.dim-filter__input:focus { border-color: var(--clr-accent); }
+.dim-filter__input::-webkit-inner-spin-button { opacity: 0.4; }
+.dim-filter__reset {
+  background: none;
+  border: 1px solid var(--clr-border);
+  color: var(--clr-text-dim);
+  font-size: 0.85rem;
+  padding: 5px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+  margin-left: auto;
+}
+.dim-filter__reset:hover { color: var(--clr-accent2); border-color: var(--clr-accent2); }
+
 .catalog__grid--l1groups {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

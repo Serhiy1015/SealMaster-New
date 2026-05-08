@@ -476,6 +476,16 @@ async function buildCatalog(preloadedProducts) {
       let activeGroup = null;
       let activeChild = null;
 
+      const parseDims = name => {
+        const m = name.match(/(\d+(?:[.,]\d+)?)\s*[*×xX]\s*(\d+(?:[.,]\d+)?)\s*[*×xX]\s*(\d+(?:[.,]\d+)?)/);
+        if (!m) return null;
+        return {
+          d: parseFloat(m[1].replace(',', '.')),
+          D: parseFloat(m[2].replace(',', '.')),
+          h: parseFloat(m[3].replace(',', '.')),
+        };
+      };
+
       const l1Label = document.createElement('div');
       l1Label.className = 'subtype-l1-label';
       gridEl.parentNode.insertBefore(l1Label, gridEl);
@@ -483,6 +493,41 @@ async function buildCatalog(preloadedProducts) {
       const l2Bar = document.createElement('div');
       l2Bar.className = 'subtype-tabs subtype-tabs--l2';
       gridEl.parentNode.insertBefore(l2Bar, gridEl);
+
+      const filterEl = document.createElement('div');
+      filterEl.className = 'dim-filter';
+      filterEl.hidden = true;
+      filterEl.innerHTML = `
+        <span class="dim-filter__label">Пошук за розміром:</span>
+        <label class="dim-filter__field">
+          <span>d</span><input class="dim-filter__input" id="dimFd" type="number" min="0" step="0.1" placeholder="—">
+        </label>
+        <label class="dim-filter__field">
+          <span>D</span><input class="dim-filter__input" id="dimFD" type="number" min="0" step="0.1" placeholder="—">
+        </label>
+        <label class="dim-filter__field">
+          <span>h</span><input class="dim-filter__input" id="dimFh" type="number" min="0" step="0.1" placeholder="—">
+        </label>
+        <button class="dim-filter__reset" id="dimReset" title="Скинути">✕</button>`;
+      gridEl.parentNode.insertBefore(filterEl, gridEl);
+
+      const getDimFilter = () => ({
+        d: parseFloat(document.getElementById('dimFd')?.value),
+        D: parseFloat(document.getElementById('dimFD')?.value),
+        h: parseFloat(document.getElementById('dimFh')?.value),
+      });
+
+      const resetDimFilter = () => {
+        ['dimFd', 'dimFD', 'dimFh'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+      };
+
+      filterEl.addEventListener('input', () => renderProducts());
+      document.getElementById('dimReset') && document.getElementById('dimReset').addEventListener('click', () => {
+        resetDimFilter(); renderProducts();
+      });
 
       const resolveHash = (h) => {
         for (const group of subcats) {
@@ -496,6 +541,8 @@ async function buildCatalog(preloadedProducts) {
       const showL1Groups = () => {
         l1Label.hidden = true;
         l2Bar.hidden = true;
+        filterEl.hidden = true;
+        resetDimFilter();
         const l1Sep = document.getElementById('breadcrumbL1Sep');
         const l1Bc  = document.getElementById('breadcrumbL1');
         if (l1Sep) l1Sep.hidden = true;
@@ -511,6 +558,7 @@ async function buildCatalog(preloadedProducts) {
       const showGroup = () => {
         l1Label.hidden = false;
         l2Bar.hidden = false;
+        filterEl.hidden = false;
         l1Label.textContent = activeGroup.name;
         const l1Sep = document.getElementById('breadcrumbL1Sep');
         const l1Bc  = document.getElementById('breadcrumbL1');
@@ -530,6 +578,7 @@ async function buildCatalog(preloadedProducts) {
           btn.textContent = child.short || child.name;
           btn.addEventListener('click', () => {
             activeChild = child.id;
+            resetDimFilter();
             renderL2(); renderProducts();
           });
           l2Bar.appendChild(btn);
@@ -537,7 +586,19 @@ async function buildCatalog(preloadedProducts) {
       };
 
       function renderProducts() {
-        const filtered = products.filter(p => p.categoryId === catId && p.subtype === activeChild);
+        let filtered = products.filter(p => p.categoryId === catId && p.subtype === activeChild);
+        const { d, D, h } = getDimFilter();
+        const hasFilter = !isNaN(d) || !isNaN(D) || !isNaN(h);
+        if (hasFilter) {
+          filtered = filtered.filter(p => {
+            const dims = parseDims(p.name);
+            if (!dims) return false;
+            if (!isNaN(d) && dims.d !== d) return false;
+            if (!isNaN(D) && dims.D !== D) return false;
+            if (!isNaN(h) && dims.h !== h) return false;
+            return true;
+          });
+        }
         renderGrid(filtered);
       }
 
@@ -555,7 +616,11 @@ async function buildCatalog(preloadedProducts) {
         const h = location.hash.slice(1);
         if (!h) { activeGroup = null; activeChild = null; showL1Groups(); return; }
         const resolved = resolveHash(h);
-        if (resolved) { activeGroup = resolved.group; activeChild = resolved.child; showGroup(); }
+        if (resolved) {
+          activeGroup = resolved.group; activeChild = resolved.child;
+          resetDimFilter();
+          showGroup();
+        }
       });
 
       return;
