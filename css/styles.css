@@ -825,6 +825,25 @@ h1, h2, h3, h4 {
 .feature-card__text { font-size: 0.83rem; color: var(--clr-text-dim); line-height: 1.5; }
 
 /* ---- CATALOG (main page) ---- */
+/* ── Dim Search (головна) ──────────────────────────────────────── */
+.dim-search {
+  padding: 64px 0 48px;
+  background: var(--clr-surface);
+  border-bottom: 1px solid var(--clr-border);
+}
+.dim-search .dim-filter {
+  max-width: 640px;
+  margin-bottom: 24px;
+}
+.dim-search__hint {
+  color: var(--clr-text-dim);
+  font-size: 0.9rem;
+  margin: 0 0 8px;
+}
+.dim-search #homeDimGrid {
+  margin-top: 16px;
+}
+
 .catalog { padding: 72px 0; background: var(--clr-bg); }
 
 .catalog__filters {

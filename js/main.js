@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buildCategoryCards(products);
     buildCatalog(products);
     startHeroSlideshow(products);
+    initHomeDimSearch(products);
   });
 
   /* ---------- Product Modal ---------- */
@@ -454,6 +455,166 @@ async function loadProducts() {
 }
 
 /* ============================================================
+   DIM HELPERS
+   ============================================================ */
+function parseDims(name) {
+  const m = name.match(/(\d+(?:[.,]\d+)?)\s*[*×xX]\s*(\d+(?:[.,]\d+)?)\s*[*×xX]\s*(\d+(?:[.,]\d+)?)/);
+  if (!m) return null;
+  return {
+    d: parseFloat(m[1].replace(',', '.')),
+    D: parseFloat(m[2].replace(',', '.')),
+    h: parseFloat(m[3].replace(',', '.')),
+  };
+}
+
+function renderProductGrid(gridEl, filtered, allProducts) {
+  if (!filtered.length) {
+    gridEl.innerHTML = '<p class="catalog__loading">Товарів не знайдено.</p>';
+    return;
+  }
+
+  gridEl.innerHTML = filtered.map(p => productCardHTML(p)).join('');
+
+  gridEl.querySelectorAll('.product-card__img[data-src]').forEach(img => {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          el.src = el.dataset.src;
+          el.classList.add('loading');
+          el.addEventListener('load', () => {
+            el.classList.remove('loading');
+            el.classList.add('loaded');
+            const ph = el.closest('.product-card__img-wrap')?.querySelector('.product-card__placeholder');
+            if (ph) ph.style.display = 'none';
+          }, { once: true });
+          el.addEventListener('error', () => { el.style.display = 'none'; }, { once: true });
+          obs.unobserve(el);
+        }
+      });
+    }, { rootMargin: '200px' });
+    observer.observe(img);
+  });
+
+  gridEl.querySelectorAll('.product-card__cta[data-product-id]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const product = allProducts.find(p => p.id === parseInt(btn.dataset.productId, 10));
+      if (product) openProductModal(product);
+    });
+  });
+
+  gridEl.querySelectorAll('.product-card__add[data-id]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const id = parseInt(btn.dataset.id, 10);
+      if (btn.classList.contains('product-card__add--done')) {
+        if (typeof cartRemove === 'function') cartRemove(id);
+      } else {
+        const product = allProducts.find(p => p.id === id);
+        if (product && typeof cartAdd === 'function') cartAdd(product);
+      }
+    });
+  });
+
+  if (typeof cartUpdateButtons === 'function') cartUpdateButtons();
+}
+
+/* ============================================================
+   HOME DIM SEARCH
+   ============================================================ */
+function initHomeDimSearch(allProducts) {
+  const filterEl = document.getElementById('homeDimFilter');
+  const gridEl   = document.getElementById('homeDimGrid');
+  const hintEl   = document.getElementById('homeDimHint');
+  if (!filterEl || !gridEl) return;
+
+  filterEl.innerHTML = `
+    <div class="dim-filter__left">
+      <span class="dim-filter__title">Розмір</span>
+    </div>
+    <div class="dim-filter__pills">
+      <label class="dim-pill">
+        <span class="dim-pill__key">d</span>
+        <span class="dim-pill__name">внутр</span>
+        <input class="dim-pill__input" id="homeDimFd" type="number" min="0" step="0.1" placeholder="—">
+        <span class="dim-pill__unit">мм</span>
+      </label>
+      <label class="dim-pill">
+        <span class="dim-pill__key">D</span>
+        <span class="dim-pill__name">зовн</span>
+        <input class="dim-pill__input" id="homeDimFD" type="number" min="0" step="0.1" placeholder="—">
+        <span class="dim-pill__unit">мм</span>
+      </label>
+      <label class="dim-pill">
+        <span class="dim-pill__key">h</span>
+        <span class="dim-pill__name">висота</span>
+        <input class="dim-pill__input" id="homeDimFh" type="number" min="0" step="0.1" placeholder="—">
+        <span class="dim-pill__unit">мм</span>
+      </label>
+    </div>
+    <div class="dim-filter__count">
+      <span class="dim-filter__count-label">Знайдено</span>
+      <span class="dim-filter__count-num" id="homeDimCount">—</span>
+    </div>
+    <button class="dim-filter__reset" id="homeDimReset" title="Скинути">✕</button>`;
+
+  const getFilter = () => ({
+    d: parseFloat(document.getElementById('homeDimFd')?.value),
+    D: parseFloat(document.getElementById('homeDimFD')?.value),
+    h: parseFloat(document.getElementById('homeDimFh')?.value),
+  });
+
+  const resetFilter = () => {
+    ['homeDimFd', 'homeDimFD', 'homeDimFh'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+  };
+
+  const runSearch = () => {
+    const { d, D, h } = getFilter();
+    const hasFilter = !isNaN(d) || !isNaN(D) || !isNaN(h);
+
+    ['homeDimFd', 'homeDimFD', 'homeDimFh'].forEach(id => {
+      const inp = document.getElementById(id);
+      if (inp) inp.closest('.dim-pill')?.classList.toggle('dim-pill--active', inp.value !== '');
+    });
+
+    const countEl = document.getElementById('homeDimCount');
+
+    if (!hasFilter) {
+      gridEl.hidden = true;
+      if (hintEl) hintEl.hidden = false;
+      if (countEl) countEl.textContent = '—';
+      return;
+    }
+
+    const filtered = allProducts.filter(p => {
+      const dims = parseDims(p.name);
+      if (!dims) return false;
+      if (!isNaN(d) && dims.d !== d) return false;
+      if (!isNaN(D) && dims.D !== D) return false;
+      if (!isNaN(h) && dims.h !== h) return false;
+      return true;
+    });
+
+    if (countEl) countEl.textContent = filtered.length;
+    if (hintEl) hintEl.hidden = true;
+    gridEl.hidden = false;
+
+    if (!filtered.length) {
+      gridEl.innerHTML = '<p class="catalog__loading">Нічого не знайдено. <a href="tel:+380966852191">Зателефонуйте нам</a> — підберемо індивідуально.</p>';
+      return;
+    }
+
+    renderProductGrid(gridEl, filtered, allProducts);
+  };
+
+  filterEl.addEventListener('input', runSearch);
+  document.getElementById('homeDimReset')?.addEventListener('click', () => { resetFilter(); runSearch(); });
+}
+
+/* ============================================================
    BUILD CATALOG
    ============================================================ */
 async function buildCatalog(preloadedProducts) {
@@ -475,16 +636,6 @@ async function buildCatalog(preloadedProducts) {
       // ── Два яруси (наприклад gidro.html) ──────────────────────────
       let activeGroup = null;
       let activeChild = null;
-
-      const parseDims = name => {
-        const m = name.match(/(\d+(?:[.,]\d+)?)\s*[*×xX]\s*(\d+(?:[.,]\d+)?)\s*[*×xX]\s*(\d+(?:[.,]\d+)?)/);
-        if (!m) return null;
-        return {
-          d: parseFloat(m[1].replace(',', '.')),
-          D: parseFloat(m[2].replace(',', '.')),
-          h: parseFloat(m[3].replace(',', '.')),
-        };
-      };
 
       const l1Label = document.createElement('div');
       l1Label.className = 'subtype-l1-label';
@@ -721,55 +872,7 @@ async function buildCatalog(preloadedProducts) {
 
   // ── Спільна функція рендеру сітки товарів ──────────────────────────
   function renderGrid(filtered) {
-    if (!filtered.length) {
-      gridEl.innerHTML = '<p class="catalog__loading">Товарів не знайдено.</p>';
-      return;
-    }
-
-    gridEl.innerHTML = filtered.map(p => productCardHTML(p)).join('');
-
-    gridEl.querySelectorAll('.product-card__img[data-src]').forEach(img => {
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const el = entry.target;
-            el.src = el.dataset.src;
-            el.classList.add('loading');
-            el.addEventListener('load', () => {
-              el.classList.remove('loading');
-              el.classList.add('loaded');
-              const ph = el.closest('.product-card__img-wrap')?.querySelector('.product-card__placeholder');
-              if (ph) ph.style.display = 'none';
-            }, { once: true });
-            el.addEventListener('error', () => { el.style.display = 'none'; }, { once: true });
-            obs.unobserve(el);
-          }
-        });
-      }, { rootMargin: '200px' });
-      observer.observe(img);
-    });
-
-    gridEl.querySelectorAll('.product-card__cta[data-product-id]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const product = products.find(p => p.id === parseInt(btn.dataset.productId, 10));
-        if (product) openProductModal(product);
-      });
-    });
-
-    gridEl.querySelectorAll('.product-card__add[data-id]').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const id = parseInt(btn.dataset.id, 10);
-        if (btn.classList.contains('product-card__add--done')) {
-          if (typeof cartRemove === 'function') cartRemove(id);
-        } else {
-          const product = products.find(p => p.id === id);
-          if (product && typeof cartAdd === 'function') cartAdd(product);
-        }
-      });
-    });
-
-    if (typeof cartUpdateButtons === 'function') cartUpdateButtons();
+    renderProductGrid(gridEl, filtered, products);
   }
 }
 
