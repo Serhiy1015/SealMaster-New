@@ -496,6 +496,10 @@ async function buildCatalog(preloadedProducts) {
       const showL1Groups = () => {
         l1Label.hidden = true;
         l2Bar.hidden = true;
+        const l1Sep = document.getElementById('breadcrumbL1Sep');
+        const l1Bc  = document.getElementById('breadcrumbL1');
+        if (l1Sep) l1Sep.hidden = true;
+        if (l1Bc)  l1Bc.textContent = '';
         gridEl.className = 'catalog__grid catalog__grid--l1groups';
         gridEl.innerHTML = subcats.map(group => `
           <a href="#${group.id}" class="l1-group-card">
@@ -508,6 +512,10 @@ async function buildCatalog(preloadedProducts) {
         l1Label.hidden = false;
         l2Bar.hidden = false;
         l1Label.textContent = activeGroup.name;
+        const l1Sep = document.getElementById('breadcrumbL1Sep');
+        const l1Bc  = document.getElementById('breadcrumbL1');
+        if (l1Sep) l1Sep.hidden = false;
+        if (l1Bc)  l1Bc.textContent = activeGroup.name;
         gridEl.className = 'catalog__grid catalog__grid--list';
         renderL2();
         renderProducts();
