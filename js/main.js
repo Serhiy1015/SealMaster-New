@@ -498,19 +498,33 @@ async function buildCatalog(preloadedProducts) {
       filterEl.className = 'dim-filter';
       filterEl.hidden = true;
       filterEl.innerHTML = `
-        <span class="dim-filter__label">Пошук за розміром:</span>
-        <label class="dim-filter__field">
-          <span class="dim-filter__dim">d<span class="dim-filter__hint">вн. діам.</span></span>
-          <input class="dim-filter__input" id="dimFd" type="number" min="0" step="0.1" placeholder="—">
-        </label>
-        <label class="dim-filter__field">
-          <span class="dim-filter__dim">D<span class="dim-filter__hint">зовн. діам.</span></span>
-          <input class="dim-filter__input" id="dimFD" type="number" min="0" step="0.1" placeholder="—">
-        </label>
-        <label class="dim-filter__field">
-          <span class="dim-filter__dim">h<span class="dim-filter__hint">висота</span></span>
-          <input class="dim-filter__input" id="dimFh" type="number" min="0" step="0.1" placeholder="—">
-        </label>
+        <div class="dim-filter__left">
+          <span class="dim-filter__title">Розмір</span>
+        </div>
+        <div class="dim-filter__pills">
+          <label class="dim-pill">
+            <span class="dim-pill__key">d</span>
+            <span class="dim-pill__name">внутр</span>
+            <input class="dim-pill__input" id="dimFd" type="number" min="0" step="0.1" placeholder="—">
+            <span class="dim-pill__unit">мм</span>
+          </label>
+          <label class="dim-pill">
+            <span class="dim-pill__key">D</span>
+            <span class="dim-pill__name">зовн</span>
+            <input class="dim-pill__input" id="dimFD" type="number" min="0" step="0.1" placeholder="—">
+            <span class="dim-pill__unit">мм</span>
+          </label>
+          <label class="dim-pill">
+            <span class="dim-pill__key">h</span>
+            <span class="dim-pill__name">висота</span>
+            <input class="dim-pill__input" id="dimFh" type="number" min="0" step="0.1" placeholder="—">
+            <span class="dim-pill__unit">мм</span>
+          </label>
+        </div>
+        <div class="dim-filter__count">
+          <span class="dim-filter__count-label">Знайдено</span>
+          <span class="dim-filter__count-num" id="dimCount">—</span>
+        </div>
         <button class="dim-filter__reset" id="dimReset" title="Скинути">✕</button>`;
       gridEl.parentNode.insertBefore(filterEl, gridEl);
 
@@ -602,6 +616,12 @@ async function buildCatalog(preloadedProducts) {
             return true;
           });
         }
+        const countEl = document.getElementById('dimCount');
+        if (countEl) countEl.textContent = filtered.length;
+        ['dimFd', 'dimFD', 'dimFh'].forEach(id => {
+          const inp = document.getElementById(id);
+          if (inp) inp.closest('.dim-pill')?.classList.toggle('dim-pill--active', inp.value !== '');
+        });
         renderGrid(filtered);
       }
 
