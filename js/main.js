@@ -467,13 +467,13 @@ function parseDims(name) {
   };
 }
 
-function renderProductGrid(gridEl, filtered, allProducts) {
+function renderProductGrid(gridEl, filtered, allProducts, noImage = false) {
   if (!filtered.length) {
     gridEl.innerHTML = '<p class="catalog__loading">Товарів не знайдено.</p>';
     return;
   }
 
-  gridEl.innerHTML = filtered.map(p => productCardHTML(p)).join('');
+  gridEl.innerHTML = filtered.map(p => productCardHTML(p, noImage)).join('');
 
   gridEl.querySelectorAll('.product-card__img[data-src]').forEach(img => {
     const observer = new IntersectionObserver((entries, obs) => {
@@ -641,6 +641,12 @@ async function buildCatalog(preloadedProducts) {
       l1Label.className = 'subtype-l1-label';
       gridEl.parentNode.insertBefore(l1Label, gridEl);
 
+      const bannerEl = document.createElement('img');
+      bannerEl.className = 'subcat-banner';
+      bannerEl.hidden = true;
+      bannerEl.alt = '';
+      gridEl.parentNode.insertBefore(bannerEl, gridEl);
+
       const l2Bar = document.createElement('div');
       l2Bar.className = 'subtype-tabs subtype-tabs--l2';
       gridEl.parentNode.insertBefore(l2Bar, gridEl);
@@ -708,6 +714,7 @@ async function buildCatalog(preloadedProducts) {
 
       const showL1Groups = () => {
         l1Label.hidden = true;
+        bannerEl.hidden = true;
         l2Bar.hidden = true;
         filterEl.hidden = true;
         resetDimFilter();
@@ -725,6 +732,12 @@ async function buildCatalog(preloadedProducts) {
 
       const showGroup = () => {
         l1Label.hidden = false;
+        if (activeGroup.image) {
+          bannerEl.src = activeGroup.image;
+          bannerEl.hidden = false;
+        } else {
+          bannerEl.hidden = true;
+        }
         l2Bar.hidden = false;
         filterEl.hidden = false;
         l1Label.textContent = activeGroup.name;
@@ -773,7 +786,7 @@ async function buildCatalog(preloadedProducts) {
           const inp = document.getElementById(id);
           if (inp) inp.closest('.dim-pill')?.classList.toggle('dim-pill--active', inp.value !== '');
         });
-        renderGrid(filtered);
+        renderProductGrid(gridEl, filtered, products, true);
       }
 
       const hashId = location.hash.slice(1);
@@ -801,12 +814,27 @@ async function buildCatalog(preloadedProducts) {
     }
 
     // ── Один ярус (наприклад kilcia.html) ─────────────────────────
+    const bannerEl1 = document.createElement('img');
+    bannerEl1.className = 'subcat-banner';
+    bannerEl1.hidden = true;
+    bannerEl1.alt = '';
+    gridEl.parentNode.insertBefore(bannerEl1, gridEl);
+
     const tabsBar = document.createElement('div');
     tabsBar.className = 'subtype-tabs';
     gridEl.parentNode.insertBefore(tabsBar, gridEl);
 
     const hashId = location.hash.slice(1);
     let activeSubtype = subcats.find(s => s.id === hashId) ? hashId : subcats[0].id;
+
+    const updateBanner1 = (sub) => {
+      if (sub && sub.image) {
+        bannerEl1.src = sub.image;
+        bannerEl1.hidden = false;
+      } else {
+        bannerEl1.hidden = true;
+      }
+    };
 
     subcats.forEach(sub => {
       const btn = document.createElement('button');
@@ -817,17 +845,19 @@ async function buildCatalog(preloadedProducts) {
         tabsBar.querySelectorAll('.subtype-tab').forEach(b => b.classList.remove('subtype-tab--active'));
         btn.classList.add('subtype-tab--active');
         activeSubtype = sub.id;
+        updateBanner1(sub);
         renderProducts();
       });
       tabsBar.appendChild(btn);
     });
 
-    gridEl.className = 'catalog__grid';
+    gridEl.className = 'catalog__grid catalog__grid--list';
+    updateBanner1(subcats.find(s => s.id === activeSubtype));
     renderProducts();
 
     function renderProducts() {
       const filtered = products.filter(p => p.categoryId === catId && p.subtype === activeSubtype);
-      renderGrid(filtered);
+      renderProductGrid(gridEl, filtered, products, true);
     }
 
     window.addEventListener('hashchange', () => {
@@ -837,6 +867,7 @@ async function buildCatalog(preloadedProducts) {
       tabsBar.querySelectorAll('.subtype-tab').forEach(b => b.classList.remove('subtype-tab--active'));
       tabsBar.querySelector(`[data-subtype="${newHash}"]`)?.classList.add('subtype-tab--active');
       activeSubtype = newHash;
+      updateBanner1(sub);
       renderProducts();
     });
 
@@ -884,14 +915,13 @@ function createFilterBtn(filter, label, active) {
   return btn;
 }
 
-function productCardHTML(p) {
+function productCardHTML(p, noImage = false) {
   const cat  = (typeof CATEGORIES !== 'undefined') ? CATEGORIES.find(c => c.id === p.categoryId) : null;
   const catName = cat ? cat.name : '';
   const price = p.price ? `<span class="product-card__price">${formatPrice(p.price)}</span>` : '<span class="product-card__price">Ціна за запитом</span>';
   const badge = p.badge ? `<span class="product-card__badge">${p.badge}</span>` : '';
 
-  return `
-    <article class="product-card">
+  const imgHtml = noImage ? '' : `
       <div class="product-card__img-wrap" data-name="${escHtml(p.name)}" role="button" tabindex="0" aria-label="Збільшити фото: ${escHtml(p.name)}">
         <img
           class="product-card__img"
@@ -907,7 +937,11 @@ function productCardHTML(p) {
           <span>Фото<br>незабаром</span>
         </div>
         ${badge}
-      </div>
+      </div>`;
+
+  return `
+    <article class="product-card">
+      ${imgHtml}
       <div class="product-card__body">
         ${cat && cat.page
           ? `<a href="${escHtml(cat.page)}" class="product-card__cat">${escHtml(catName)}</a>`

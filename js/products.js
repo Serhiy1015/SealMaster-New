@@ -67,10 +67,18 @@ const SUBCATEGORIES = {
    *    short необов'язкове: якщо не вказати — береться name.
    *    В Google Sheets колонка subtype = id серії (наприклад 'k21').
    */
+  /**
+   *  ФОТО ПІДКАТЕГОРІЇ:
+   *  До будь-якої підкатегорії (або L1-групи) можна додати поле image:
+   *    image: 'images/categories/manzhety.jpg'
+   *  Воно відображається як банер вгорі сторінки при виборі цієї підкатегорії.
+   *  Якщо поле не вказано — банер не показується.
+   */
   gidro: [
     {
       id: 'manzhety',
       name: 'Манжети гідравлічні',
+      // image: 'images/categories/manzhety.jpg',
       children: [
         { id: 'k21',   name: 'МАНЖЕТИ УНІВЕРСАЛЬНІ K21',  short: 'K21'    },
         { id: 'k22',   name: 'МАНЖЕТИ ШТОКОВІ K22',      short: 'K22'    },
