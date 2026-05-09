@@ -730,14 +730,15 @@ async function buildCatalog(preloadedProducts) {
           </a>`).join('');
       };
 
+      const updateBanner = () => {
+        const child = (activeGroup.children || []).find(c => c.id === activeChild);
+        const img = (child && child.image) || activeGroup.image;
+        if (img) { bannerEl.src = img; bannerEl.hidden = false; }
+        else      { bannerEl.hidden = true; }
+      };
+
       const showGroup = () => {
         l1Label.hidden = false;
-        if (activeGroup.image) {
-          bannerEl.src = activeGroup.image;
-          bannerEl.hidden = false;
-        } else {
-          bannerEl.hidden = true;
-        }
         l2Bar.hidden = false;
         filterEl.hidden = false;
         l1Label.textContent = activeGroup.name;
@@ -746,6 +747,7 @@ async function buildCatalog(preloadedProducts) {
         if (l1Sep) l1Sep.hidden = false;
         if (l1Bc)  l1Bc.textContent = activeGroup.name;
         gridEl.className = 'catalog__grid catalog__grid--list';
+        updateBanner();
         renderL2();
         renderProducts();
       };
@@ -760,6 +762,7 @@ async function buildCatalog(preloadedProducts) {
           btn.addEventListener('click', () => {
             activeChild = child.id;
             resetDimFilter();
+            updateBanner();
             renderL2(); renderProducts();
           });
           l2Bar.appendChild(btn);
