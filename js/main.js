@@ -637,15 +637,21 @@ async function buildCatalog(preloadedProducts) {
       let activeGroup = null;
       let activeChild = null;
 
+      const subcatHeader = document.createElement('div');
+      subcatHeader.className = 'subcat-header';
+      subcatHeader.hidden = true;
+
       const l1Label = document.createElement('div');
       l1Label.className = 'subtype-l1-label';
-      gridEl.parentNode.insertBefore(l1Label, gridEl);
 
       const bannerEl = document.createElement('img');
       bannerEl.className = 'subcat-banner';
       bannerEl.hidden = true;
       bannerEl.alt = '';
-      gridEl.parentNode.insertBefore(bannerEl, gridEl);
+
+      subcatHeader.appendChild(l1Label);
+      subcatHeader.appendChild(bannerEl);
+      gridEl.parentNode.insertBefore(subcatHeader, gridEl);
 
       const l2Bar = document.createElement('div');
       l2Bar.className = 'subtype-tabs subtype-tabs--l2';
@@ -713,8 +719,7 @@ async function buildCatalog(preloadedProducts) {
       };
 
       const showL1Groups = () => {
-        l1Label.hidden = true;
-        bannerEl.hidden = true;
+        subcatHeader.hidden = true;
         l2Bar.hidden = true;
         filterEl.hidden = true;
         resetDimFilter();
@@ -738,7 +743,7 @@ async function buildCatalog(preloadedProducts) {
       };
 
       const showGroup = () => {
-        l1Label.hidden = false;
+        subcatHeader.hidden = false;
         l2Bar.hidden = false;
         filterEl.hidden = false;
         l1Label.textContent = activeGroup.name;
