@@ -637,21 +637,35 @@ async function buildCatalog(preloadedProducts) {
       let activeGroup = null;
       let activeChild = null;
 
-      const subcatHeader = document.createElement('div');
-      subcatHeader.className = 'subcat-header';
-      subcatHeader.hidden = true;
+      // Знаходимо h1 і вбудовуємо його у flex-обгортку разом з фото
+      const containerEl = gridEl.closest('.container');
+      const pageTitleEl = containerEl?.querySelector('.catalog-page__title');
+
+      const pageHeroEl = document.createElement('div');
+      pageHeroEl.className = 'page-hero';
+
+      const pageHeroTextEl = document.createElement('div');
+      pageHeroTextEl.className = 'page-hero__text';
 
       const l1Label = document.createElement('div');
       l1Label.className = 'subtype-l1-label';
+      l1Label.hidden = true;
 
       const bannerEl = document.createElement('img');
       bannerEl.className = 'subcat-banner';
       bannerEl.hidden = true;
       bannerEl.alt = '';
 
-      subcatHeader.appendChild(l1Label);
-      subcatHeader.appendChild(bannerEl);
-      gridEl.parentNode.insertBefore(subcatHeader, gridEl);
+      pageHeroTextEl.appendChild(l1Label);
+      pageHeroEl.appendChild(pageHeroTextEl);
+      pageHeroEl.appendChild(bannerEl);
+
+      if (pageTitleEl) {
+        pageTitleEl.parentNode.insertBefore(pageHeroEl, pageTitleEl);
+        pageHeroTextEl.insertBefore(pageTitleEl, l1Label);
+      } else {
+        gridEl.parentNode.insertBefore(pageHeroEl, gridEl);
+      }
 
       const l2Bar = document.createElement('div');
       l2Bar.className = 'subtype-tabs subtype-tabs--l2';
@@ -719,7 +733,8 @@ async function buildCatalog(preloadedProducts) {
       };
 
       const showL1Groups = () => {
-        subcatHeader.hidden = true;
+        l1Label.hidden = true;
+        bannerEl.hidden = true;
         l2Bar.hidden = true;
         filterEl.hidden = true;
         resetDimFilter();
@@ -743,7 +758,7 @@ async function buildCatalog(preloadedProducts) {
       };
 
       const showGroup = () => {
-        subcatHeader.hidden = false;
+        l1Label.hidden = false;
         l2Bar.hidden = false;
         filterEl.hidden = false;
         l1Label.textContent = activeGroup.name;

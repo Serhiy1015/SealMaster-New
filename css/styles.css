@@ -1012,13 +1012,35 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 
 /* ---- LIST VIEW ---- */
-.subcat-header {
-  margin-bottom: 16px;
+.page-hero {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 20px;
+}
+.page-hero__text {
+  flex: 1;
+  min-width: 0;
+}
+.page-hero .catalog-page__title {
+  margin-bottom: 4px;
 }
 
+/* Банер у page-hero — фіксована висота, природні пропорції */
+.page-hero .subcat-banner {
+  height: 200px;
+  width: auto;
+  max-width: 300px;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin: 0;
+  border-radius: 8px;
+}
+
+/* Банер standalone (single-level) */
 .subcat-banner {
   display: block;
-  max-height: 240px;
+  max-height: 220px;
   width: auto;
   max-width: 100%;
   height: auto;
