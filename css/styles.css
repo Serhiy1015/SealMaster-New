@@ -1025,10 +1025,13 @@ a.product-card__cat:hover { text-decoration: underline; }
 
 /* Банер як фото справа у заголовку підкатегорії (two-level) */
 .subcat-header .subcat-banner {
-  width: 300px;
   height: 180px;
+  width: auto;
+  max-width: 320px;
   flex-shrink: 0;
   margin: 0;
+  object-fit: contain;
+  border-radius: 6px;
 }
 
 /* Банер як вузька смуга (single-level, standalone) */
