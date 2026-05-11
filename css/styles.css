@@ -1013,35 +1013,18 @@ a.product-card__cat:hover { text-decoration: underline; }
 
 /* ---- LIST VIEW ---- */
 .subcat-header {
-  display: flex;
-  align-items: center;
-  gap: 24px;
   margin-bottom: 16px;
 }
-.subcat-header .subtype-l1-label {
-  flex: 1;
-  margin-bottom: 0;
-}
 
-/* Банер як фото справа у заголовку підкатегорії (two-level) */
-.subcat-header .subcat-banner {
-  height: 180px;
-  width: auto;
-  max-width: 320px;
-  flex-shrink: 0;
-  margin: 0;
-  object-fit: contain;
-  border-radius: 6px;
-}
-
-/* Банер як вузька смуга (single-level, standalone) */
 .subcat-banner {
   display: block;
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
+  max-height: 240px;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
   border-radius: 8px;
-  margin-bottom: 16px;
+  margin: 10px auto 0;
 }
 
 .catalog__grid--list {
@@ -1097,9 +1080,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   .catalog__grid--list .product-card { flex-direction: column; }
   .catalog__grid--list .product-card__body { flex-direction: column; }
   .catalog__grid--list .product-card__footer { border-top: 1px solid var(--clr-border); padding-top: 12px; margin-top: 12px; }
-  .subcat-header { flex-direction: column; gap: 12px; }
-  .subcat-header .subcat-banner { width: 100%; height: 160px; }
-  .subcat-banner { max-height: 140px; }
+  .subcat-banner { max-height: 160px; }
 }
 
 .catalog__note { margin-top: 80px; text-align: center; color: var(--clr-text-dim); font-size: 15px; }
