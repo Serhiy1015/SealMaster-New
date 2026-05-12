@@ -1021,6 +1021,12 @@ a.product-card__cat:hover { text-decoration: underline; }
 .page-hero__text {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.page-hero__text .subtype-tabs--l2 {
+  margin-top: auto;
+  padding-top: 12px;
 }
 .page-hero .catalog-page__title {
   margin-bottom: 4px;

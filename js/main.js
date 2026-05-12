@@ -669,7 +669,7 @@ async function buildCatalog(preloadedProducts) {
 
       const l2Bar = document.createElement('div');
       l2Bar.className = 'subtype-tabs subtype-tabs--l2';
-      gridEl.parentNode.insertBefore(l2Bar, gridEl);
+      pageHeroTextEl.appendChild(l2Bar);
 
       const filterEl = document.createElement('div');
       filterEl.className = 'dim-filter';
