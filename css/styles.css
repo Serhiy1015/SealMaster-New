@@ -1028,9 +1028,9 @@ a.product-card__cat:hover { text-decoration: underline; }
 
 /* Банер у page-hero — фіксована висота, природні пропорції */
 .page-hero .subcat-banner {
-  height: 200px;
+  height: 280px;
   width: auto;
-  max-width: 300px;
+  max-width: 420px;
   object-fit: contain;
   flex-shrink: 0;
   margin: 0;
