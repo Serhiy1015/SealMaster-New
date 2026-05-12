@@ -1026,7 +1026,11 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 .page-hero__text .subtype-tabs--l2 {
   margin-top: auto;
-  padding-top: 12px;
+  padding-top: 8px;
+}
+.page-hero__text .dim-filter {
+  margin-top: 8px;
+  margin-bottom: 0;
 }
 .page-hero .catalog-page__title {
   margin-bottom: 4px;

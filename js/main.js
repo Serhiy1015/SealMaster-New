@@ -703,7 +703,7 @@ async function buildCatalog(preloadedProducts) {
           <span class="dim-filter__count-num" id="dimCount">—</span>
         </div>
         <button class="dim-filter__reset" id="dimReset" title="Скинути">✕</button>`;
-      gridEl.parentNode.insertBefore(filterEl, gridEl);
+      pageHeroTextEl.appendChild(filterEl);
 
       const getDimFilter = () => ({
         d: parseFloat(document.getElementById('dimFd')?.value),
