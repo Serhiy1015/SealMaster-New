@@ -948,7 +948,7 @@ async function buildCatalog(preloadedProducts) {
 
       const updateBanner = () => {
         const child = (activeGroup.children || []).find(c => c.id === activeChild);
-        const img = (child && child.image) || activeGroup.image;
+        const img = ((child && child.image) || activeGroup.image || '').trim();
         if (img) { bannerEl.src = img; bannerWrapEl.hidden = false; }
         else      { bannerWrapEl.hidden = true; }
       };
