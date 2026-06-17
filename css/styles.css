@@ -1301,10 +1301,10 @@ a.product-card__cat:hover { text-decoration: underline; }
   .catalog__grid--list .product-card__body { flex-direction: column; }
   .catalog__grid--list .product-card__footer { border-top: 1px solid var(--clr-border); padding-top: 12px; margin-top: 12px; }
   .subcat-banner { max-height: 160px; }
-  .page-hero { padding-right: 0; }
-  .page-hero__banner { display: none; }
-  .page-hero--simple { padding-right: 0; }
-  .subcat-banner { display: none; }
+  .page-hero { padding-right: 96px; }
+  .page-hero__banner { width: 80px; height: 80px; top: 0; bottom: auto; border-radius: 6px; }
+  .page-hero--simple { padding-right: 96px; }
+  .page-hero--simple .page-hero__banner { width: 80px; height: 80px; }
 }
 
 .results-bar {
