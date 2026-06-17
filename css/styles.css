@@ -1304,6 +1304,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   .page-hero { padding-right: 0; }
   .page-hero__banner { display: none; }
   .page-hero--simple { padding-right: 0; }
+  .subcat-banner { display: none; }
 }
 
 .results-bar {
