@@ -437,11 +437,11 @@ async function loadProducts() {
   if (!url) return typeof PRODUCTS !== 'undefined' ? PRODUCTS : [];
 
   const CACHE_KEY = 'products_csv_v2';
-  const CACHE_TTL = 2 * 60 * 1000; // 2 хвилини
+  const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 години
 
-  // Спробуємо взяти з sessionStorage
+  // Спробуємо взяти з localStorage
   try {
-    const cached = sessionStorage.getItem(CACHE_KEY);
+    const cached = localStorage.getItem(CACHE_KEY);
     if (cached) {
       const { ts, text } = JSON.parse(cached);
       if (Date.now() - ts < CACHE_TTL) {
@@ -453,10 +453,10 @@ async function loadProducts() {
 
   // Fetch свіжих даних
   try {
-    const res = await fetch(url + '&t=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
-    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), text })); } catch (e) {}
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), text })); } catch (e) {}
     const rows = parseCSV(text);
     if (rows.length) return rows;
   } catch (e) {

@@ -80,7 +80,7 @@ const SUBCATEGORIES = {
       name: 'Манжети гідравлічні',
       // image: 'images/categories/manzhety.jpg',
       children: [
-        { id: 'k21',   name: 'МАНЖЕТИ УНІВЕРСАЛЬНІ K21',  short: 'K21', image: 'images/categories/k21.png'},
+        { id: 'k21',   name: 'МАНЖЕТИ УНІВЕРСАЛЬНІ K21',  short: 'K21', image: 'images/categories/k21.jpg'},
         { id: 'k22',   name: 'МАНЖЕТИ ШТОКОВІ K22',      short: 'K22', image: 'images/categories/k22.JPG'    },
         { id: 'k23',   name: 'МАНЖЕТИ ШТОКОВІ K23',      short: 'K23', image: 'images/categories/k23.JPG '   },
         { id: 'k31',   name: 'МАНЖЕТИ ШТОКОВІ K31',      short: 'K31', image: 'images/categories/k31.JPG  '  },
