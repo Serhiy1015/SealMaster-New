@@ -1883,6 +1883,16 @@ a.product-card__cat:hover { text-decoration: underline; }
   display: flex; flex-wrap: wrap;
   gap: 2px; margin-bottom: 28px;
 }
+@media (max-width: 600px) {
+  .subtype-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .subtype-tabs::-webkit-scrollbar { display: none; }
+}
 
 .subtype-tab {
   padding: 8px 18px;
