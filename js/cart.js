@@ -252,7 +252,7 @@ function initCart() {
     } else {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Підтвердити замовлення';
-      alert('Помилка відправки. Зателефонуйте нам: +380966852191');
+      alert('Помилка відправки. Зателефонуйте нам: +380685740961');
     }
   });
 
