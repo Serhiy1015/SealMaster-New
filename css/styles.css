@@ -2583,6 +2583,7 @@ a.product-card__cat:hover { text-decoration: underline; }
 .btn--full { width: 100%; justify-content: center; }
 
 /* Успіх */
+.cart-success[hidden] { display: none !important; }
 .cart-success {
   display: flex;
   flex-direction: column;
