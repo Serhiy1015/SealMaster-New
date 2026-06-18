@@ -2164,6 +2164,7 @@ a.product-card__cat:hover { text-decoration: underline; }
 
   .burger { display: flex; }
   .header__cta { display: none; }
+  .cart-btn { margin-right: 4px; }
 
   .nav {
     position: fixed;
