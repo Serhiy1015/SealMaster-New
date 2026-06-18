@@ -91,6 +91,12 @@ function cartOpen() {
 function cartClose() {
   document.getElementById('cartDrawer')?.classList.remove('open');
   document.body.style.overflow = '';
+  const success = document.getElementById('cartSuccess');
+  const form = document.getElementById('cartForm');
+  if (success && !success.hidden) {
+    success.hidden = true;
+    if (form) { form.reset(); form.hidden = false; }
+  }
 }
 
 /* ── Render items ────────────────────────────────────────── */
