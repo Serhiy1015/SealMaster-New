@@ -1302,11 +1302,11 @@ a.product-card__cat:hover { text-decoration: underline; }
   .page-hero--simple { padding-right: 0; }
   .page-hero__banner {
     position: relative; right: auto; bottom: auto;
-    width: 100%; height: auto;
+    width: 100%; aspect-ratio: 1 / 1; height: auto;
     border-radius: 6px; margin-bottom: 12px;
   }
-  .page-hero__banner .subcat-banner { height: auto; max-height: 180px; }
-  .page-hero--simple .page-hero__banner { width: 100%; height: auto; }
+  .page-hero__banner .subcat-banner { height: 100%; object-fit: cover; max-height: none; }
+  .page-hero--simple .page-hero__banner { width: 100%; aspect-ratio: 1 / 1; height: auto; }
 
   /* Рядки товарів: назва+ціна зліва, кнопка справа */
   .catalog__grid--list .product-card__body {
@@ -2209,7 +2209,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   .hero { padding: 56px 0 48px; }
   .hero__inner { grid-template-columns: 1fr; gap: 28px; }
   .hero__img-wrap {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 1 / 1;
     width: 100%;
   }
   .hero__img-wrap::before,
