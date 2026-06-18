@@ -1297,12 +1297,31 @@ a.product-card__cat:hover { text-decoration: underline; }
   .catalog__grid--list { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
-  .catalog__grid--list .product-card { flex-direction: column; }
-  .catalog__grid--list .product-card__body { flex-direction: column; }
-  .catalog__grid--list .product-card__footer { border-top: 1px solid var(--clr-border); padding-top: 12px; margin-top: 12px; }
+  /* Банер: в потоці над табами */
   .page-hero { padding-right: 0; }
-  .page-hero__banner { display: none; }
   .page-hero--simple { padding-right: 0; }
+  .page-hero__banner {
+    position: relative; right: auto; bottom: auto;
+    width: 100%; height: auto;
+    border-radius: 6px; margin-bottom: 12px;
+  }
+  .page-hero__banner .subcat-banner { height: auto; max-height: 180px; }
+  .page-hero--simple .page-hero__banner { width: 100%; height: auto; }
+
+  /* Рядки товарів: назва+ціна зліва, кнопка справа */
+  .catalog__grid--list .product-card__body {
+    display: grid;
+    grid-template-areas: "name btn" "price btn";
+    grid-template-columns: 1fr auto;
+    padding: 12px 16px;
+    gap: 2px 16px;
+    align-items: center;
+    flex-direction: unset;
+  }
+  .catalog__grid--list .product-card__name { grid-area: name; font-size: 1rem; margin-bottom: 0; }
+  .catalog__grid--list .product-card__footer { display: contents; }
+  .catalog__grid--list .product-card__price { grid-area: price; font-size: 0.95rem; }
+  .catalog__grid--list .product-card__add { grid-area: btn; align-self: center; }
 }
 
 .results-bar {

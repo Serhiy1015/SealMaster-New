@@ -852,7 +852,6 @@ async function buildCatalog(preloadedProducts) {
 
       pageHeroTextEl.appendChild(l1Label);
       pageHeroEl.appendChild(pageHeroTextEl);
-      pageHeroEl.appendChild(bannerWrapEl);
 
       if (pageTitleEl) {
         pageTitleEl.parentNode.insertBefore(pageHeroEl, pageTitleEl);
@@ -864,6 +863,7 @@ async function buildCatalog(preloadedProducts) {
       const l2Bar = document.createElement('div');
       l2Bar.className = 'subtype-tabs subtype-tabs--l2';
       pageHeroTextEl.appendChild(l2Bar);
+      pageHeroTextEl.insertBefore(bannerWrapEl, l2Bar);
 
       const filterEl = document.createElement('div');
       filterEl.className = 'dim-filter';
@@ -1060,7 +1060,6 @@ async function buildCatalog(preloadedProducts) {
     bannerWrapEl1.appendChild(bannerEl1);
 
     pageHeroEl1.appendChild(pageHeroTextEl1);
-    pageHeroEl1.appendChild(bannerWrapEl1);
 
     if (pageTitleEl1) {
       pageTitleEl1.parentNode.insertBefore(pageHeroEl1, pageTitleEl1);
@@ -1072,6 +1071,7 @@ async function buildCatalog(preloadedProducts) {
     const tabsBar = document.createElement('div');
     tabsBar.className = 'subtype-tabs subtype-tabs--l2';
     pageHeroTextEl1.appendChild(tabsBar);
+    pageHeroTextEl1.insertBefore(bannerWrapEl1, tabsBar);
 
     const hashId = location.hash.slice(1);
     let activeSubtype = subcats.find(s => s.id === hashId) ? hashId : subcats[0].id;
@@ -1274,7 +1274,7 @@ async function buildCatalog(preloadedProducts) {
       bannerImgCat.addEventListener('click', () => window.openLightbox(catImg, bannerImgCat.alt));
       bannerWrapCat.appendChild(bannerImgCat);
       pageHeroElCat.appendChild(pageHeroTextElCat);
-      pageHeroElCat.appendChild(bannerWrapCat);
+      pageHeroTextElCat.appendChild(bannerWrapCat);
     } else {
       pageHeroElCat.appendChild(pageHeroTextElCat);
     }
