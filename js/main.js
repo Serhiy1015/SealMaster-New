@@ -36,37 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', onScroll, { passive: true });
 
   /* ---------- Burger / mobile nav ---------- */
-  const burger = document.getElementById('burger');
-  const nav    = document.getElementById('nav');
-
-  if (burger && nav) {
-    burger.addEventListener('click', () => {
-      const isOpen = nav.classList.toggle('open');
-      burger.classList.toggle('open', isOpen);
-      burger.setAttribute('aria-expanded', isOpen);
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-    });
-
-    // Close nav on link click
-    nav.querySelectorAll('.nav__link').forEach(link => {
-      link.addEventListener('click', () => {
-        nav.classList.remove('open');
-        burger.classList.remove('open');
-        burger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      });
-    });
-
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (!nav.contains(e.target) && !burger.contains(e.target)) {
-        nav.classList.remove('open');
-        burger.classList.remove('open');
-        burger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      }
-    });
-  }
+  initMobileNav();
 
   /* ---------- Back to top ---------- */
   const btt = document.getElementById('backToTop');
@@ -347,6 +317,102 @@ function initDropdown() {
       if (burger) { burger.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); }
       document.body.style.overflow = '';
     });
+  });
+}
+
+/* ============================================================
+   MOBILE NAV (акордеон, тільки ≤900px)
+   ============================================================ */
+function initMobileNav() {
+  const burger = document.getElementById('burger');
+  if (!burger || typeof CATEGORIES === 'undefined') return;
+
+  const activeCat = typeof CATALOG_CATEGORY !== 'undefined' ? CATALOG_CATEGORY : null;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'mobile-nav';
+  overlay.id = 'mobileNav';
+  overlay.setAttribute('aria-hidden', 'true');
+
+  const chevronSvg = (cls = '') =>
+    `<svg class="mnav-chevron${cls ? ' ' + cls : ''}" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+
+  const catsHTML = CATEGORIES.map(cat => {
+    const subs = (typeof SUBCATEGORIES !== 'undefined' && SUBCATEGORIES[cat.id]) || null;
+    const isTwoLevel = subs && subs[0] && subs[0].children;
+    const isActive = activeCat === cat.id;
+
+    if (!subs || !subs.length) {
+      return `<li class="mnav-cat${isActive ? ' mnav-cat--active' : ''}">
+        <a href="${cat.page}" class="mnav-cat__link">${escHtml(cat.name)}</a>
+      </li>`;
+    }
+
+    const subsHTML = (isTwoLevel ? subs : subs).map(sub =>
+      `<li><a href="${cat.page}#${sub.id}" class="mnav-sub__link">${escHtml(sub.name)}</a></li>`
+    ).join('');
+
+    return `<li class="mnav-cat mnav-cat--has-sub${isActive ? ' mnav-cat--active open' : ''}">
+      <div class="mnav-cat__row">
+        <a href="${cat.page}" class="mnav-cat__link">${escHtml(cat.name)}</a>
+        <button class="mnav-cat__toggle" aria-label="Розкрити">${chevronSvg()}</button>
+      </div>
+      <ul class="mnav-subs">${subsHTML}</ul>
+    </li>`;
+  }).join('');
+
+  const catalogOpen = !!activeCat;
+  overlay.innerHTML = `<ul class="mnav-list">
+    <li class="mnav-section${catalogOpen ? ' open' : ''}">
+      <button class="mnav-section__btn" aria-expanded="${catalogOpen}">
+        <span>Каталог</span>${chevronSvg()}
+      </button>
+      <ul class="mnav-cats">${catsHTML}</ul>
+    </li>
+    <li><a href="#delivery" class="mnav-link">Доставка</a></li>
+    <li><a href="#contacts" class="mnav-link">Контакти</a></li>
+    <li><a href="blog.html" class="mnav-link">Статті</a></li>
+  </ul>`;
+
+  document.body.appendChild(overlay);
+
+  const sectionBtn = overlay.querySelector('.mnav-section__btn');
+  const sectionLi  = overlay.querySelector('.mnav-section');
+  sectionBtn.addEventListener('click', () => {
+    const open = sectionLi.classList.toggle('open');
+    sectionBtn.setAttribute('aria-expanded', open);
+  });
+
+  overlay.querySelectorAll('.mnav-cat__toggle').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      btn.closest('.mnav-cat--has-sub').classList.toggle('open');
+    });
+  });
+
+  const close = () => {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+
+  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+
+  burger.addEventListener('click', e => {
+    e.stopPropagation();
+    const isOpen = overlay.classList.toggle('open');
+    overlay.setAttribute('aria-hidden', !isOpen);
+    burger.classList.toggle('open', isOpen);
+    burger.setAttribute('aria-expanded', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  document.addEventListener('click', e => {
+    if (overlay.classList.contains('open') && !overlay.contains(e.target) && !burger.contains(e.target)) {
+      close();
+    }
   });
 }
 
