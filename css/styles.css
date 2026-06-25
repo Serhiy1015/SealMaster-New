@@ -2198,14 +2198,17 @@ a.product-card__cat:hover { text-decoration: underline; }
     display: block;
     position: fixed;
     top: calc(var(--topbar-h) + var(--header-h));
-    left: 0; right: 0; bottom: 0;
+    left: 0; right: 0;
+    max-height: calc(100vh - var(--topbar-h) - var(--header-h));
     background: var(--clr-surface2);
     z-index: 98;
     overflow-y: auto;
+    font-family: var(--font-body);
     opacity: 0;
     transform: translateY(-10px);
     pointer-events: none;
     transition: opacity 0.22s ease, transform 0.22s ease;
+    border-bottom: 3px solid var(--clr-accent);
   }
   .mobile-nav.open {
     opacity: 1;
