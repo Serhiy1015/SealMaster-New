@@ -1426,7 +1426,7 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 .product-detail__title {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: 20px;
