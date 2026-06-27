@@ -1413,10 +1413,17 @@ a.product-card__cat:hover { text-decoration: underline; }
   letter-spacing: 0.12em;
   color: var(--clr-accent);
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 .product-detail__cat a { color: inherit; text-decoration: none; }
 .product-detail__cat a:hover { text-decoration: underline; }
+.product-detail__subtype {
+  font-size: 0.9rem;
+  color: var(--clr-fg-muted);
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
 .product-detail__title {
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 3vw, 2.2rem);

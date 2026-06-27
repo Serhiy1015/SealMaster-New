@@ -1,6 +1,24 @@
+function findSubcatInfo(categoryId, subtypeId) {
+  if (!subtypeId || typeof SUBCATEGORIES === 'undefined') return null;
+  const subs = SUBCATEGORIES[categoryId];
+  if (!subs || !subs.length) return null;
+  const isTwoLevel = subs[0] && subs[0].children;
+  if (isTwoLevel) {
+    for (const group of subs) {
+      if (group.id === subtypeId) return { label: group.name, image: group.image || null };
+      const child = (group.children || []).find(c => c.id === subtypeId);
+      if (child) return { label: child.name, image: child.image || group.image || null };
+    }
+  } else {
+    const sub = subs.find(s => s.id === subtypeId);
+    if (sub) return { label: sub.name, image: sub.image || null };
+  }
+  return null;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
-  const params  = new URLSearchParams(window.location.search);
-  const id      = parseInt(params.get('id'), 10);
+  const params    = new URLSearchParams(window.location.search);
+  const id        = parseInt(params.get('id'), 10);
   const container = document.getElementById('productDetail');
   if (!container) return;
 
@@ -23,6 +41,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const catName = cat ? cat.name : '';
   const catPage = cat ? cat.page : 'catalog.html';
 
+  const subcat  = findSubcatInfo(product.categoryId, product.subtype);
+  const imgSrc  = product.image || (subcat && subcat.image) || '';
+
   document.title = product.name + ' — Sealmaster';
 
   const metaDesc = document.querySelector('meta[name="description"]');
@@ -37,24 +58,29 @@ document.addEventListener('DOMContentLoaded', async () => {
       `<span>${escHtml(product.name)}</span>`;
   }
 
-  const priceVal = product.price ? formatPrice(product.price) : null;
+  const priceVal  = product.price ? formatPrice(product.price) : null;
   const priceHTML = priceVal
     ? `<p class="product-detail__price">${priceVal}</p>`
     : `<p class="product-detail__price product-detail__price--ask">Ціна за запитом</p>`;
   const desc = product.details || product.desc || '';
 
-  const imgHTML = product.image
-    ? `<img class="product-detail__img loading" id="pdImg" src="${escHtml(product.image)}" alt="${escHtml(product.name)}" />`
+  const imgHTML = imgSrc
+    ? `<img class="product-detail__img loading" id="pdImg" src="${escHtml(imgSrc)}" alt="${escHtml(product.name)}" />`
     : `<div class="product-detail__img-ph">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         <span>Фото незабаром</span>
        </div>`;
+
+  const subcatLabelHTML = subcat
+    ? `<p class="product-detail__subtype">${escHtml(subcat.label)}</p>`
+    : '';
 
   container.innerHTML = `
     <div class="product-detail">
       <div class="product-detail__img-wrap" id="pdImgWrap">${imgHTML}</div>
       <div class="product-detail__info">
         ${catName ? `<p class="product-detail__cat"><a href="${escHtml(catPage)}">${escHtml(catName)}</a></p>` : ''}
+        ${subcatLabelHTML}
         <h1 class="product-detail__title">${escHtml(product.name)}</h1>
         ${desc ? `<p class="product-detail__desc">${escHtml(desc)}</p>` : ''}
         ${priceHTML}
@@ -77,18 +103,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     pdImg.addEventListener('load', () => { pdImg.classList.remove('loading'); pdImg.classList.add('loaded'); });
     pdImg.addEventListener('error', () => { pdImg.style.display = 'none'; });
     pdImg.addEventListener('click', () => {
-      if (typeof window.openLightbox === 'function') window.openLightbox(product.image, product.name);
+      if (typeof window.openLightbox === 'function') window.openLightbox(imgSrc, product.name);
     });
   }
 
   // Add to cart
   const addBtn = document.getElementById('pdAddCart');
   if (addBtn && typeof cartAdd === 'function') {
-    // Check if already in cart
     const updateBtn = () => {
       if (typeof cartGet === 'function') {
         const inCart = cartGet().some(i => i.id === product.id);
-        addBtn.textContent = inCart ? '✓ В кошику' : '';
         if (inCart) {
           addBtn.classList.add('product-detail__add--done');
           addBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> В кошику`;
@@ -98,7 +122,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
     };
-
     updateBtn();
     addBtn.addEventListener('click', () => {
       if (typeof cartGet === 'function' && cartGet().some(i => i.id === product.id)) {
