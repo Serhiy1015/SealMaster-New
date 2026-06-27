@@ -1158,32 +1158,6 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 
 /* ---- LIST VIEW ---- */
-.catalog-2col {
-  display: flex;
-  align-items: flex-start;
-  gap: 32px;
-}
-.catalog-2col__main {
-  flex: 1;
-  min-width: 0;
-}
-.catalog-2col__sidebar {
-  width: 320px;
-  flex-shrink: 0;
-  position: sticky;
-  top: calc(var(--topbar-h) + var(--header-h) + 20px);
-}
-.catalog-2col__sidebar .page-hero__banner {
-  position: static;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-  right: auto;
-  bottom: auto;
-}
-.catalog-2col .page-hero { padding-right: 0; }
-.catalog-2col .catalog__grid--list { padding-right: 0; }
-
 .page-hero {
   position: relative;
   display: flex;

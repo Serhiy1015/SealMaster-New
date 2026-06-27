@@ -914,23 +914,10 @@ async function buildCatalog(preloadedProducts) {
         gridEl.parentNode.insertBefore(pageHeroEl, gridEl);
       }
 
-      // Sticky sidebar: виносимо банер у правову колонку
-      const twoColEl = document.createElement('div');
-      twoColEl.className = 'catalog-2col';
-      const mainColEl = document.createElement('div');
-      mainColEl.className = 'catalog-2col__main';
-      const sidebarEl = document.createElement('div');
-      sidebarEl.className = 'catalog-2col__sidebar';
-      sidebarEl.appendChild(bannerWrapEl);
-      pageHeroEl.parentNode.insertBefore(twoColEl, pageHeroEl);
-      twoColEl.appendChild(mainColEl);
-      twoColEl.appendChild(sidebarEl);
-      mainColEl.appendChild(pageHeroEl);
-      mainColEl.appendChild(gridEl);
-
       const l2Bar = document.createElement('div');
       l2Bar.className = 'subtype-tabs subtype-tabs--l2';
       pageHeroTextEl.appendChild(l2Bar);
+      pageHeroTextEl.insertBefore(bannerWrapEl, l2Bar);
 
       const filterEl = document.createElement('div');
       filterEl.className = 'dim-filter';
@@ -1135,23 +1122,10 @@ async function buildCatalog(preloadedProducts) {
       gridEl.parentNode.insertBefore(pageHeroEl1, gridEl);
     }
 
-    // Sticky sidebar: виносимо банер у правову колонку
-    const twoColEl1 = document.createElement('div');
-    twoColEl1.className = 'catalog-2col';
-    const mainColEl1 = document.createElement('div');
-    mainColEl1.className = 'catalog-2col__main';
-    const sidebarEl1 = document.createElement('div');
-    sidebarEl1.className = 'catalog-2col__sidebar';
-    sidebarEl1.appendChild(bannerWrapEl1);
-    pageHeroEl1.parentNode.insertBefore(twoColEl1, pageHeroEl1);
-    twoColEl1.appendChild(mainColEl1);
-    twoColEl1.appendChild(sidebarEl1);
-    mainColEl1.appendChild(pageHeroEl1);
-    mainColEl1.appendChild(gridEl);
-
     const tabsBar = document.createElement('div');
     tabsBar.className = 'subtype-tabs subtype-tabs--l2';
     pageHeroTextEl1.appendChild(tabsBar);
+    pageHeroTextEl1.insertBefore(bannerWrapEl1, tabsBar);
 
     const hashId = location.hash.slice(1);
     let activeSubtype = subcats.find(s => s.id === hashId) ? hashId : subcats[0].id;

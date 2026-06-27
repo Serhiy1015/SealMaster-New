@@ -82,7 +82,7 @@ const SUBCATEGORIES = {
       children: [
         { id: 'k21',   name: 'МАНЖЕТИ УНІВЕРСАЛЬНІ K21',  short: 'K21', image: 'images/categories/k21.jpg'},
         { id: 'k22',   name: 'МАНЖЕТИ ШТОКОВІ K22',      short: 'K22',   image: 'images/categories/K22_1.JPG' },
-        { id: 'k23',   name: 'МАНЖЕТИ ШТОКОВІ K23',      short: 'K23',   image: 'images/categories/k23.JPG' },
+        { id: 'k23',   name: 'МАНЖЕТИ ПОРШНЕВІ K23',      short: 'K23',   image: 'images/categories/k23.JPG' },
         { id: 'k31',   name: 'МАНЖЕТИ ШТОКОВІ K31',      short: 'K31',   image: 'images/categories/k31.JPG' },
         { id: 'k32',   name: 'МАНЖЕТИ ШТОКОВІ K32',      short: 'K32',   image: 'images/categories/k32.JPG' },
         { id: 'k33',   name: 'МАНЖЕТИ ШТОКОВІ K33',      short: 'K33',   image: 'images/categories/k33.JPG' },
