@@ -1239,8 +1239,8 @@ a.product-card__cat:hover { text-decoration: underline; }
 
 .catalog__grid--list {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 12px;
+  grid-template-columns: 1fr;
+  gap: 0;
 }
 
 .catalog__grid--list .product-card {
