@@ -17,21 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
     footerInner.prepend(cta);
   }
 
-  /* ---------- Sticky header shadow + hide on scroll (mobile) ---------- */
+  /* ---------- Sticky header shadow ---------- */
   const header = document.getElementById('header');
-  let lastScrollY = window.scrollY;
   const onScroll = () => {
     if (!header) return;
-    const y = window.scrollY;
-    header.classList.toggle('scrolled', y > 10);
-    if (window.innerWidth <= 768) {
-      if (y > lastScrollY && y > 80) {
-        header.classList.add('header--hidden');
-      } else {
-        header.classList.remove('header--hidden');
-      }
-    }
-    lastScrollY = y;
+    header.classList.toggle('scrolled', window.scrollY > 10);
   };
   window.addEventListener('scroll', onScroll, { passive: true });
 
