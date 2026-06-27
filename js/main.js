@@ -1680,9 +1680,10 @@ function startHeroSlideshow() {
   const switchTo = (src) => {
     img.style.opacity = '0';
     setTimeout(() => {
-      img.src = src;
       img.onload  = () => { img.style.opacity = '1'; };
       img.onerror = () => { advance(); };
+      img.src = src;
+      if (img.complete && img.naturalWidth > 0) img.style.opacity = '1';
     }, 600);
   };
 
