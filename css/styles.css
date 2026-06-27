@@ -628,15 +628,6 @@ h1, h2, h3, h4 {
   pointer-events: none;
 }
 
-.hero::after {
-  content: '';
-  position: absolute;
-  top: 24px; right: 24px;
-  width: 60px; height: 60px;
-  border-top: 3px solid var(--clr-accent);
-  border-right: 3px solid var(--clr-accent);
-  opacity: 0.4;
-}
 
 .hero__inner {
   display: grid;
