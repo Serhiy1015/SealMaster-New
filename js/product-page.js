@@ -1,3 +1,11 @@
+const GROUP_TYPE_LABELS = {
+  manzhety:       'Манжета',
+  budoznymachi:   'Брудознімач',
+  shtok:          'Ущільнення штока',
+  porshni:        'Ущільнення поршня',
+  napravliaiuchi: 'Направляюче кільце',
+};
+
 function findSubcatInfo(categoryId, subtypeId) {
   if (!subtypeId || typeof SUBCATEGORIES === 'undefined') return null;
   const subs = SUBCATEGORIES[categoryId];
@@ -5,13 +13,13 @@ function findSubcatInfo(categoryId, subtypeId) {
   const isTwoLevel = subs[0] && subs[0].children;
   if (isTwoLevel) {
     for (const group of subs) {
-      if (group.id === subtypeId) return { label: group.name, image: group.image || null };
+      if (group.id === subtypeId) return { typeLabel: GROUP_TYPE_LABELS[group.id] || null, image: group.image || null };
       const child = (group.children || []).find(c => c.id === subtypeId);
-      if (child) return { label: child.name, image: child.image || group.image || null };
+      if (child) return { typeLabel: GROUP_TYPE_LABELS[group.id] || null, image: child.image || group.image || null };
     }
   } else {
     const sub = subs.find(s => s.id === subtypeId);
-    if (sub) return { label: sub.name, image: sub.image || null };
+    if (sub) return { typeLabel: null, image: sub.image || null };
   }
   return null;
 }
@@ -71,17 +79,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         <span>Фото незабаром</span>
        </div>`;
 
-  const subcatLabelHTML = subcat
-    ? `<p class="product-detail__subtype">${escHtml(subcat.label)}</p>`
-    : '';
+  const typePrefix = subcat && subcat.typeLabel ? subcat.typeLabel + ' ' : '';
 
   container.innerHTML = `
     <div class="product-detail">
       <div class="product-detail__img-wrap" id="pdImgWrap">${imgHTML}</div>
       <div class="product-detail__info">
         ${catName ? `<p class="product-detail__cat"><a href="${escHtml(catPage)}">${escHtml(catName)}</a></p>` : ''}
-        ${subcatLabelHTML}
-        <h1 class="product-detail__title">${escHtml(product.name)}</h1>
+        <h1 class="product-detail__title">${escHtml(typePrefix + product.name)}</h1>
         ${desc ? `<p class="product-detail__desc">${escHtml(desc)}</p>` : ''}
         ${priceHTML}
         <div class="product-detail__actions">
