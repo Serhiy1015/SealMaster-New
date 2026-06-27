@@ -1241,6 +1241,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   display: grid;
   grid-template-columns: 1fr;
   gap: 0;
+  padding-right: 352px;
 }
 
 .catalog__grid--list .product-card {
@@ -1291,6 +1292,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   /* Банер: в потоці над табами */
   .page-hero { padding-right: 0; }
   .page-hero--simple { padding-right: 0; }
+  .catalog__grid--list { padding-right: 0; }
   .page-hero__banner {
     position: relative; right: auto; bottom: auto;
     width: 100%; aspect-ratio: 1 / 1; height: auto;
