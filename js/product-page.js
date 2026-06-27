@@ -1,3 +1,4 @@
+// Гідро: L1-групи → тип у однині
 const GROUP_TYPE_LABELS = {
   manzhety:       'Манжета',
   budoznymachi:   'Брудознімач',
@@ -6,22 +7,63 @@ const GROUP_TYPE_LABELS = {
   napravliaiuchi: 'Направляюче кільце',
 };
 
+// Single-level підтипи → тип у однині
+const SUBTYPE_LABELS = {
+  // pnevmo
+  k25: 'Поршень пневматичний',
+  k30: 'Ущільнення', k50: 'Ущільнення', k52: 'Ущільнення', k53: 'Ущільнення',
+  k54: 'Ущільнення', k55: 'Ущільнення', k56: 'Ущільнення', k57: 'Ущільнення',
+  k58: 'Ущільнення', k59: 'Ущільнення', k62: 'Ущільнення', k63: 'Ущільнення',
+  k64: 'Ущільнення', k65: 'Ущільнення', pnev_mpz: 'Ущільнення',
+  // statychni
+  st_k82: 'Статичне ущільнення', st_k83: 'Статичне ущільнення',
+  st_k84: 'Статичне ущільнення', st_k85: 'Статичне ущільнення',
+  st_k86: 'Статичне ущільнення',
+  // kilcia
+  nbr70: 'Кільце NBR', nbr90: 'Кільце NBR', xring: 'Кільце X-Ring',
+  fpm80: 'Кільце FPM', epdm70: 'Кільце EPDM', vmq70: 'Кільце VMQ',
+  shnury: 'Шнур ущільнюючий',
+  // manzhety (armovani)
+  manzh_asl: 'Манжета армована', manzh_bahd: 'Манжета армована',
+  manzh_combi: 'Манжета армована', manzh_corteco: 'Манжета армована',
+  manzh_dmhui: 'Манжета армована', manzh_sog: 'Манжета армована',
+  manzh_kasety: 'Касета',
+  // kompresory
+  komp_usch: 'Ущільнення компресорне', brs: 'Втулка компресорна',
+  // remkomplekty
+  rem_hyva: 'Ремкомплект', rem_edbro: 'Ремкомплект', rem_hydromas: 'Ремкомплект',
+  // komplektuiuchi
+  kompl_pidsh: 'Підшипник ШС', kompl_buks: 'Букса', kompl_porsh: 'Поршень',
+  kompl_vuho_shtok: 'Вухо ГЦ (шток)', kompl_vuho_truba: 'Вухо ГЦ (труба)',
+  kompl_khrom: 'Шток хромований', kompl_trubu: 'Труба хонінгована',
+};
+
+// Категорії без підкатегорій → тип
+const CATEGORY_LABELS = {
+  vtulky:       'Втулка',
+  rotatsiyni:   'Ротаційне ущільнення',
+  robotyzovani: 'Ущільнення КП',
+};
+
 function findSubcatInfo(categoryId, subtypeId) {
-  if (!subtypeId || typeof SUBCATEGORIES === 'undefined') return null;
-  const subs = SUBCATEGORIES[categoryId];
-  if (!subs || !subs.length) return null;
-  const isTwoLevel = subs[0] && subs[0].children;
-  if (isTwoLevel) {
-    for (const group of subs) {
-      if (group.id === subtypeId) return { typeLabel: GROUP_TYPE_LABELS[group.id] || null, image: group.image || null };
-      const child = (group.children || []).find(c => c.id === subtypeId);
-      if (child) return { typeLabel: GROUP_TYPE_LABELS[group.id] || null, image: child.image || group.image || null };
+  if (typeof SUBCATEGORIES !== 'undefined') {
+    const subs = SUBCATEGORIES[categoryId];
+    if (subs && subs.length) {
+      const isTwoLevel = subs[0] && subs[0].children;
+      if (isTwoLevel) {
+        for (const group of subs) {
+          if (group.id === subtypeId) return { typeLabel: GROUP_TYPE_LABELS[group.id] || null, image: group.image || null };
+          const child = (group.children || []).find(c => c.id === subtypeId);
+          if (child) return { typeLabel: GROUP_TYPE_LABELS[group.id] || null, image: child.image || group.image || null };
+        }
+      } else if (subtypeId) {
+        const sub = subs.find(s => s.id === subtypeId);
+        if (sub) return { typeLabel: SUBTYPE_LABELS[subtypeId] || null, image: sub.image || null };
+      }
     }
-  } else {
-    const sub = subs.find(s => s.id === subtypeId);
-    if (sub) return { typeLabel: null, image: sub.image || null };
   }
-  return null;
+  // Fallback: категорія без підкатегорій
+  return { typeLabel: CATEGORY_LABELS[categoryId] || null, image: null };
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
