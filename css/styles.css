@@ -1319,8 +1319,6 @@ a.product-card__cat:hover { text-decoration: underline; }
   .page-hero { padding-right: 0; }
   .page-hero--simple { padding-right: 0; }
   .catalog__grid--list { padding-right: 0; }
-  .catalog-2col { flex-direction: column; }
-  .catalog-2col__sidebar { position: static; width: 100%; max-width: 320px; }
   .page-hero__banner {
     position: relative; right: auto; bottom: auto;
     width: 100%; aspect-ratio: 1 / 1; height: auto;
