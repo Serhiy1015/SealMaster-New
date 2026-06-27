@@ -593,13 +593,11 @@ function renderSearchRows(listEl, filtered, allProducts, dims = {}) {
     const catName = cat ? cat.name : '';
     const price = p.price ? `<span class="search-row__price">${formatPrice(p.price)}</span>` : '<span class="search-row__price search-row__price--ask">Ціна за запитом</span>';
 
-    const href = cat && cat.page
-      ? (p.subtype ? `${cat.page}${qs}#${p.subtype}` : `${cat.page}${qs}`)
-      : null;
+    const href = `product.html?id=${p.id}`;
 
     const row = document.createElement('a');
     row.className = 'search-row';
-    if (href) { row.href = href; } else { row.role = 'presentation'; }
+    row.href = href;
     row.innerHTML = `
       ${subImg
         ? `<img class="search-row__img" src="${escHtml(subImg)}" alt="${escHtml(p.name)}" loading="lazy">`
@@ -1485,9 +1483,7 @@ function productCardHTML(p, noImage = false) {
   const catName = cat ? cat.name : '';
   const price = p.price ? `<span class="product-card__price">${formatPrice(p.price)}</span>` : '<span class="product-card__price">Ціна за запитом</span>';
   const badge = p.badge ? `<span class="product-card__badge">${p.badge}</span>` : '';
-  const productUrl = cat && cat.page
-    ? (p.subtype ? `${cat.page}#${p.subtype}` : cat.page)
-    : null;
+  const productUrl = `product.html?id=${p.id}`;
 
   const imgHtml = noImage ? '' : `
       <div class="product-card__img-wrap">
