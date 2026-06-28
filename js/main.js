@@ -28,6 +28,18 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- Burger / mobile nav ---------- */
   initMobileNav();
 
+  /* ---------- Search icon in nav ---------- */
+  const navList = document.querySelector('.nav__list');
+  if (navList) {
+    const li = document.createElement('li');
+    li.innerHTML = `<button class="nav__search-btn" aria-label="Пошук за розміром"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>`;
+    navList.appendChild(li);
+    li.querySelector('button').addEventListener('click', () => {
+      const target = document.querySelector('.dim-filter') || document.querySelector('#dim-search');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
   /* ---------- Back to top ---------- */
   const btt = document.getElementById('backToTop');
   if (btt) {

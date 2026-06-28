@@ -205,6 +205,20 @@ h1, h2, h3, h4 {
   border-radius: 0;
 }
 
+.nav__search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--clr-text);
+  padding: 0 16px;
+  height: 100%;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.nav__search-btn:hover { color: var(--clr-accent); }
+
 .nav__link:hover {
   color: var(--clr-accent);
   border-bottom-color: var(--clr-accent);
