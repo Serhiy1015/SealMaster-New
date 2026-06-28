@@ -616,7 +616,8 @@ function renderSearchRows(listEl, filtered, allProducts, dims = {}) {
     const subImg = imgMap[p.subtype] || imgMap[p.categoryId] || '';
     const cat = (typeof CATEGORIES !== 'undefined') ? CATEGORIES.find(c => c.id === p.categoryId) : null;
     const catName = cat ? cat.name : '';
-    const price = p.price ? `<span class="search-row__price">${formatPrice(p.price)}</span>` : '<span class="search-row__price search-row__price--ask">Ціна за запитом</span>';
+    const priceRaw = (p.price && p.categoryId !== 'kilcia') ? p.price : null;
+    const price = priceRaw ? `<span class="search-row__price">${formatPrice(priceRaw)}</span>` : '<span class="search-row__price search-row__price--ask">Ціна за запитом</span>';
 
     const href = `product.html?id=${p.id}`;
 
@@ -1552,7 +1553,8 @@ function createFilterBtn(filter, label, active) {
 function productCardHTML(p, noImage = false) {
   const cat  = (typeof CATEGORIES !== 'undefined') ? CATEGORIES.find(c => c.id === p.categoryId) : null;
   const catName = cat ? cat.name : '';
-  const price = p.price ? `<span class="product-card__price" data-unit-price="${escHtml(p.price)}">${formatPrice(p.price)}</span>` : '<span class="product-card__price">Ціна за запитом</span>';
+  const priceVal = (p.price && p.categoryId !== 'kilcia') ? p.price : null;
+  const price = priceVal ? `<span class="product-card__price" data-unit-price="${escHtml(priceVal)}">${formatPrice(priceVal)}</span>` : '<span class="product-card__price">Ціна за запитом</span>';
   const badge = p.badge ? `<span class="product-card__badge">${p.badge}</span>` : '';
   const productUrl = `product.html?id=${p.id}`;
 
@@ -1700,7 +1702,7 @@ function openProductModal(product) {
   if (catEl)   catEl.textContent   = cat ? cat.name : '';
   if (titleEl) titleEl.textContent = product.name;
   if (descEl)  descEl.textContent  = (product.details || product.desc || '');
-  if (priceEl) priceEl.textContent = product.price ? formatPrice(product.price) : 'Ціна за запитом';
+  if (priceEl) priceEl.textContent = (product.price && product.categoryId !== 'kilcia') ? formatPrice(product.price) : 'Ціна за запитом';
 
   if (img) {
     img.alt = product.name;
