@@ -133,7 +133,6 @@ const SUBCATEGORIES = {
         { id: 'p_k17',  name: 'УЩІЛЬНЕННЯ K17',  short: 'K17' , image: 'images/categories/k17.JPG'   },
         { id: 'p_k18',  name: 'УЩІЛЬНЕННЯ K18',  short: 'K18' , image: 'images/categories/k18.JPG'   },
         { id: 'p_k19',  name: 'УЩІЛЬНЕННЯ K19',  short: 'K19'  , image: 'images/categories/k19.JPG'  },
-        { id: 'p_k26',  name: 'УЩІЛЬНЕННЯ K26',  short: 'K26' , image: 'images/categories/k26.JPG'   },
         { id: 'p_k42',  name: 'УЩІЛЬНЕННЯ K42',  short: 'K42' , image: 'images/categories/k42.JPG'   },
         { id: 'p_k43',  name: 'УЩІЛЬНЕННЯ K43',  short: 'K43' , image: 'images/categories/k43.JPG'   },
         { id: 'p_k46',  name: 'УЩІЛЬНЕННЯ K46',  short: 'K46' , image: 'images/categories/k46.JPG'   },
@@ -161,6 +160,7 @@ const SUBCATEGORIES = {
    */
   pnevmo: [
     { id: 'k25',     name: 'ПОРШНІ K25',       short: 'K25' , image: 'images/categories/k25.JPG' },
+    { id: 'p_k26',  name: 'УЩІЛЬНЕННЯ K26',  short: 'K26' , image: 'images/categories/k26.JPG'   },
     { id: 'k30',     name: 'УЩІЛЬНЕННЯ К30',   short: 'К30', image: 'images/categories/k30.JPG'  },
     { id: 'k50',     name: 'УЩІЛЬНЕННЯ К50',   short: 'К50' , image: 'images/categories/k50.JPG' },
     { id: 'k52',     name: 'УЩІЛЬНЕННЯ К52',   short: 'К52', image: 'images/categories/k52.JPG'  },
