@@ -1262,7 +1262,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   align-items: stretch;
   border-bottom: 1px solid var(--clr-border);
 }
-.catalog__grid--list .product-card:nth-child(even) { background: rgba(255,255,255,0.03); }
+.catalog__grid--list .product-card:nth-child(even) { background: rgba(255,255,255,0.07); }
 
 .catalog__grid--list .product-card__body {
   flex: 1;
