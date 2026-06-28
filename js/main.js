@@ -36,7 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     navList.appendChild(li);
     li.querySelector('button').addEventListener('click', () => {
       const target = document.querySelector('.dim-filter') || document.querySelector('#dim-search');
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (target) {
+        const offset = (document.getElementById('header')?.offsetHeight || 0) + 16;
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
+      }
     });
   }
 
