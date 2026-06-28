@@ -1344,7 +1344,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   border: none;
   border-left: 1px solid var(--clr-border);
   border-right: 1px solid var(--clr-border);
-  background: transparent;
+  background: var(--clr-surface2);
   color: inherit;
   font-family: inherit;
   padding: 0;
