@@ -37,8 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
     li.querySelector('button').addEventListener('click', () => {
       const target = document.querySelector('.dim-filter') || document.querySelector('#dim-search');
       if (target) {
-        const offset = (document.getElementById('header')?.offsetHeight || 0) + 16;
-        window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
+        const top = target.getBoundingClientRect().top + window.scrollY;
+        const center = top - window.innerHeight / 2 + target.offsetHeight / 2;
+        window.scrollTo({ top: center, behavior: 'smooth' });
       }
     });
   }
