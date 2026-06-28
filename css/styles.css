@@ -1146,7 +1146,6 @@ a.product-card__cat:hover { text-decoration: underline; }
   font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 800;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--clr-heading);
   margin-bottom: 8px;
