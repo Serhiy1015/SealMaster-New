@@ -2,7 +2,7 @@
    SEALMASTER — INDUSTRIAL STYLE
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono&display=swap');
 
 :root {
   --clr-bg:        #0f1013;
@@ -18,9 +18,9 @@
   --clr-steel:     #4a6278;
   --clr-white:     #ffffff;
 
-  --font-display:  'Barlow Condensed', sans-serif;
-  --font-body:     'Barlow', sans-serif;
-  --font-mono:     'Share Tech Mono', monospace;
+  --font-display:  'Roboto', sans-serif;
+  --font-body:     'Roboto', sans-serif;
+  --font-mono:     'Roboto Mono', monospace;
 
   --radius:        2px;
   --shadow-hard:   4px 4px 0 rgba(0,0,0,0.6);
