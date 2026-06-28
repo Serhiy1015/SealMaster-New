@@ -20,11 +20,11 @@ function cartGet() {
 }
 function cartSave(cart) { localStorage.setItem('sm_cart', JSON.stringify(cart)); }
 
-function cartAdd(product) {
+function cartAdd(product, qty = 1) {
   const cart = cartGet();
   const ex = cart.find(i => i.id === product.id);
-  if (ex) ex.qty = (ex.qty || 1) + 1;
-  else cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
+  if (ex) ex.qty = (ex.qty || 1) + qty;
+  else cart.push({ id: product.id, name: product.name, price: product.price, qty });
   cartSave(cart);
   cartUpdateBadge();
   cartUpdateButtons();
@@ -63,7 +63,7 @@ function cartClear() {
 
 /* ── Badge ───────────────────────────────────────────────── */
 function cartUpdateBadge() {
-  const count = cartGet().reduce((s, i) => s + (i.qty || 1), 0);
+  const count = cartGet().length;
   document.querySelectorAll('.cart-badge').forEach(el => {
     el.textContent = count;
     el.hidden = count === 0;
@@ -108,16 +108,22 @@ function cartRenderItems() {
     el.innerHTML = '<p class="cart-empty">Кошик порожній</p>';
     return;
   }
-  const fmt = (p) => {
-    if (!p) return 'Ціна за запитом';
-    if (/грн|₴|\$|€/.test(p)) return p;
-    return p + ' грн';
+  const parseNum = (p) => {
+    if (!p) return null;
+    const n = parseFloat(String(p).replace(/[^\d.,]/g, '').replace(',', '.'));
+    return isNaN(n) ? null : n;
+  };
+  const fmtTotal = (p, qty) => {
+    const n = parseNum(p);
+    if (n === null) return 'Ціна за запитом';
+    const total = n * (qty || 1);
+    return total.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' грн';
   };
   el.innerHTML = cart.map(item => `
     <div class="cart-item">
       <div class="cart-item__name">${item.name}</div>
       <div class="cart-item__right">
-        <span class="cart-item__price">${fmt(item.price)}</span>
+        <span class="cart-item__price">${fmtTotal(item.price, item.qty || 1)}</span>
         <div class="cart-item__qty-wrap">
           <button class="cart-qty-btn" data-id="${item.id}" data-delta="-1">−</button>
           <span class="cart-qty-num">${item.qty || 1}</span>

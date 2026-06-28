@@ -571,7 +571,15 @@ function buildSubcatImageMap() {
   return map;
 }
 
+function sortByInnerD(arr) {
+  return [...arr].sort((a, b) => {
+    const d = n => { const m = String(n.name).match(/\d+[,.]?\d*/); return m ? parseFloat(m[0].replace(',', '.')) : Infinity; };
+    return d(a) - d(b);
+  });
+}
+
 function renderSearchRows(listEl, filtered, allProducts, dims = {}) {
+  filtered = sortByInnerD(filtered);
   listEl.innerHTML = '';
   listEl.className = 'search-rows';
 
@@ -636,6 +644,7 @@ function renderSearchRows(listEl, filtered, allProducts, dims = {}) {
 }
 
 function renderProductGrid(gridEl, filtered, allProducts, noImage = false) {
+  filtered = sortByInnerD(filtered);
   if (!filtered.length) {
     gridEl.innerHTML = '<p class="catalog__loading">Товарів не знайдено.</p>';
     return;
@@ -671,15 +680,60 @@ function renderProductGrid(gridEl, filtered, allProducts, noImage = false) {
     });
   });
 
+  gridEl.querySelectorAll('.product-card[data-href]').forEach(card => {
+    card.addEventListener('click', e => {
+      if (!e.target.closest('button, input')) window.location.href = card.dataset.href;
+    });
+  });
+
+  const updateRowPrice = (body, qty) => {
+    const priceEl = body?.querySelector('.product-card__price[data-unit-price]');
+    if (!priceEl) return;
+    const unit = parseFloat(String(priceEl.dataset.unitPrice).replace(',', '.'));
+    if (!isNaN(unit)) {
+      priceEl.textContent = (unit * qty).toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' грн';
+    }
+  };
+
+  gridEl.querySelectorAll('.product-card__qty-btn[data-action]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const valEl = btn.closest('.product-card__qty-wrap')?.querySelector('.product-card__qty-val');
+      if (!valEl) return;
+      const cur = parseInt(valEl.value, 10) || 1;
+      const newQty = btn.dataset.action === 'inc' ? cur + 1 : Math.max(1, cur - 1);
+      valEl.value = newQty;
+      updateRowPrice(btn.closest('.product-card__body'), newQty);
+    });
+  });
+
+  gridEl.querySelectorAll('.product-card__qty-val').forEach(input => {
+    input.addEventListener('input', e => {
+      e.stopPropagation();
+      const qty = Math.max(1, parseInt(input.value, 10) || 1);
+      updateRowPrice(input.closest('.product-card__body'), qty);
+    });
+    input.addEventListener('blur', () => {
+      const qty = Math.max(1, parseInt(input.value, 10) || 1);
+      input.value = qty;
+      updateRowPrice(input.closest('.product-card__body'), qty);
+    });
+    input.addEventListener('click', e => e.stopPropagation());
+  });
+
   gridEl.querySelectorAll('.product-card__add[data-id]').forEach(btn => {
     btn.addEventListener('click', e => {
-      e.stopPropagation();
       const id = parseInt(btn.dataset.id, 10);
       if (btn.classList.contains('product-card__add--done')) {
         if (typeof cartRemove === 'function') cartRemove(id);
       } else {
         const product = allProducts.find(p => p.id === id);
-        if (product && typeof cartAdd === 'function') cartAdd(product);
+        if (product && typeof cartAdd === 'function') {
+          const qtyEl = btn.closest('.product-card__footer')?.querySelector('.product-card__qty-val');
+          const qty = qtyEl ? (Math.max(1, parseInt(qtyEl.value, 10) || 1)) : 1;
+          cartAdd(product, qty);
+        }
       }
     });
   });
@@ -1481,7 +1535,7 @@ function createFilterBtn(filter, label, active) {
 function productCardHTML(p, noImage = false) {
   const cat  = (typeof CATEGORIES !== 'undefined') ? CATEGORIES.find(c => c.id === p.categoryId) : null;
   const catName = cat ? cat.name : '';
-  const price = p.price ? `<span class="product-card__price">${formatPrice(p.price)}</span>` : '<span class="product-card__price">Ціна за запитом</span>';
+  const price = p.price ? `<span class="product-card__price" data-unit-price="${escHtml(p.price)}">${formatPrice(p.price)}</span>` : '<span class="product-card__price">Ціна за запитом</span>';
   const badge = p.badge ? `<span class="product-card__badge">${p.badge}</span>` : '';
   const productUrl = `product.html?id=${p.id}`;
 
@@ -1503,22 +1557,27 @@ function productCardHTML(p, noImage = false) {
         ${badge}
       </div>`;
 
-  const tag = productUrl ? `a href="${escHtml(productUrl)}"` : 'div';
-  const closeTag = productUrl ? 'a' : 'div';
+  const hrefAttr = productUrl ? ` data-href="${escHtml(productUrl)}"` : '';
 
   return `
-    <${tag} class="product-card">
+    <div class="product-card"${hrefAttr}>
       ${imgHtml}
       <div class="product-card__body">
         <p class="product-card__cat">${escHtml(catName)}</p>
         <h3 class="product-card__name">${escHtml(p.name)}</h3>
         ${p.desc ? `<p class="product-card__desc">${escHtml(p.desc)}</p>` : ''}
+        <span class="product-card__leader" aria-hidden="true"></span>
+        ${price}
         <div class="product-card__footer">
-          ${price}
+          <div class="product-card__qty-wrap">
+            <button class="product-card__qty-btn" data-action="dec" data-id="${p.id}" type="button">−</button>
+            <input type="number" class="product-card__qty-val" value="1" min="1">
+            <button class="product-card__qty-btn" data-action="inc" data-id="${p.id}" type="button">+</button>
+          </div>
           <button class="product-card__add" data-id="${p.id}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span>В кошик</span></button>
         </div>
       </div>
-    </${closeTag}>
+    </div>
   `;
 }
 
