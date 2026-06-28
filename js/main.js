@@ -1554,7 +1554,7 @@ function productCardHTML(p, noImage = false) {
   const cat  = (typeof CATEGORIES !== 'undefined') ? CATEGORIES.find(c => c.id === p.categoryId) : null;
   const catName = cat ? cat.name : '';
   const priceVal = (p.price && p.categoryId !== 'kilcia') ? p.price : null;
-  const price = priceVal ? `<span class="product-card__price" data-unit-price="${escHtml(priceVal)}">${formatPrice(priceVal)}</span>` : '<span class="product-card__price">Ціна за запитом</span>';
+  const price = priceVal ? `<span class="product-card__price" data-unit-price="${escHtml(priceVal)}">${formatPrice(priceVal)}</span>` : '<span class="product-card__price product-card__price--ask">За запитом</span>';
   const badge = p.badge ? `<span class="product-card__badge">${p.badge}</span>` : '';
   const productUrl = `product.html?id=${p.id}`;
 
