@@ -211,6 +211,7 @@ h1, h2, h3, h4 {
   justify-content: center;
   background: none;
   border: none;
+  border-bottom: 3px solid transparent;
   color: var(--clr-text);
   padding: 0 16px;
   height: 100%;
@@ -285,7 +286,7 @@ h1, h2, h3, h4 {
   padding: 0 4px 0 20px;
   font-family: var(--font-display);
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--clr-accent);
