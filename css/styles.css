@@ -1143,10 +1143,10 @@ h1, h2, h3, h4 {
 a.product-card__cat:hover { text-decoration: underline; }
 
 .product-card__name {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
+  font-weight: 500;
+  letter-spacing: 0;
   color: var(--clr-heading);
   margin-bottom: 8px;
   line-height: 1.2;
