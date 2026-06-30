@@ -1164,11 +1164,11 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 
 .product-card__price {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: 1.3rem;
-  font-weight: 800;
+  font-weight: 500;
   color: var(--clr-accent);
-  letter-spacing: 0.03em;
+  letter-spacing: 0;
 }
 
 /* ---- LIST VIEW ---- */
