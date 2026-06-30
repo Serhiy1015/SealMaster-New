@@ -662,13 +662,14 @@ function renderSearchRows(listEl, filtered, allProducts, dims = {}) {
 }
 
 function renderProductGrid(gridEl, filtered, allProducts, noImage = false) {
+  const subcatImgMap = buildSubcatImageMap();
   filtered = sortByInnerD(filtered);
   if (!filtered.length) {
     gridEl.innerHTML = '<p class="catalog__loading">Товарів не знайдено.</p>';
     return;
   }
 
-  gridEl.innerHTML = filtered.map(p => productCardHTML(p, noImage)).join('');
+  gridEl.innerHTML = filtered.map(p => productCardHTML(p, noImage, subcatImgMap)).join('');
 
   gridEl.querySelectorAll('.product-card__img[data-src]').forEach(img => {
     const observer = new IntersectionObserver((entries, obs) => {
@@ -1550,7 +1551,7 @@ function createFilterBtn(filter, label, active) {
   return btn;
 }
 
-function productCardHTML(p, noImage = false) {
+function productCardHTML(p, noImage = false, imgMap = {}) {
   const cat  = (typeof CATEGORIES !== 'undefined') ? CATEGORIES.find(c => c.id === p.categoryId) : null;
   const catName = cat ? cat.name : '';
   const priceVal = (p.price && p.categoryId !== 'kilcia') ? p.price : null;
@@ -1583,7 +1584,7 @@ function productCardHTML(p, noImage = false) {
       ${imgHtml}
       <div class="product-card__body">
         <p class="product-card__cat">${escHtml(catName)}</p>
-        ${p.image ? `<div class="product-card__thumb"><img src="${escHtml(p.image)}" alt="${escHtml(p.name)}" loading="lazy"></div>` : '<div class="product-card__thumb product-card__thumb--empty"></div>'}
+        ${(()=>{ const t = imgMap[p.subtype] || imgMap[p.categoryId] || p.image || ''; return t ? `<div class="product-card__thumb"><img src="${escHtml(t)}" alt="${escHtml(p.name)}" loading="lazy"></div>` : '<div class="product-card__thumb product-card__thumb--empty"></div>'; })()}
         <h3 class="product-card__name">${escHtml(p.name)}</h3>
         ${p.desc ? `<p class="product-card__desc">${escHtml(p.desc)}</p>` : ''}
         <span class="product-card__leader" aria-hidden="true"></span>
