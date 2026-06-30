@@ -1583,6 +1583,7 @@ function productCardHTML(p, noImage = false) {
       ${imgHtml}
       <div class="product-card__body">
         <p class="product-card__cat">${escHtml(catName)}</p>
+        ${p.image ? `<div class="product-card__thumb"><img src="${escHtml(p.image)}" alt="${escHtml(p.name)}" loading="lazy"></div>` : '<div class="product-card__thumb product-card__thumb--empty"></div>'}
         <h3 class="product-card__name">${escHtml(p.name)}</h3>
         ${p.desc ? `<p class="product-card__desc">${escHtml(p.desc)}</p>` : ''}
         <span class="product-card__leader" aria-hidden="true"></span>
