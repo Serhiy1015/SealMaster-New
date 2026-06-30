@@ -1271,7 +1271,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   flex-wrap: nowrap;
   padding: 10px 24px;
   gap: 0 20px;
-  min-height: 72px;
+  min-height: 88px;
 }
 
 .catalog__grid--list .product-card__cat { display: none; }
@@ -1281,8 +1281,8 @@ a.product-card__cat:hover { text-decoration: underline; }
 .catalog__grid--list .product-card__thumb {
   display: flex;
   flex-shrink: 0;
-  width: 52px;
-  height: 52px;
+  width: 68px;
+  height: 68px;
   border-radius: 6px;
   overflow: hidden;
   background: var(--clr-surface2);
