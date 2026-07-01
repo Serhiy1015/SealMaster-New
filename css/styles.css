@@ -2096,7 +2096,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   font-family: var(--font-mono);
   font-size: 0.875rem;
   color: var(--clr-text-dim);
-  max-width: 600px; margin-bottom: 36px;
+  max-width: 600px; margin-bottom: 0;
   line-height: 1.6; letter-spacing: 0.02em;
 }
 
