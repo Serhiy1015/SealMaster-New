@@ -139,6 +139,22 @@ function cartRenderItems() {
   el.querySelectorAll('.cart-qty-btn').forEach(btn => {
     btn.addEventListener('click', () => cartChangeQty(+btn.dataset.id, +btn.dataset.delta));
   });
+
+  const totalEl = document.getElementById('cartTotal');
+  const totalSumEl = document.getElementById('cartTotalSum');
+  if (totalEl && totalSumEl) {
+    const total = cart.reduce((sum, item) => {
+      const n = parseNum(item.price);
+      return n !== null ? sum + n * (item.qty || 1) : sum;
+    }, 0);
+    const hasAnyPrice = cart.some(item => parseNum(item.price) !== null);
+    if (hasAnyPrice) {
+      totalSumEl.textContent = total.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' грн';
+      totalEl.hidden = false;
+    } else {
+      totalEl.hidden = true;
+    }
+  }
 }
 
 /* ── Telegram ────────────────────────────────────────────── */
@@ -190,6 +206,10 @@ function initCart() {
       </div>
       <div id="cartItems" class="cart-drawer__items"></div>
       <div class="cart-drawer__foot">
+        <div id="cartTotal" class="cart-total" hidden>
+          <span class="cart-total__label">Разом</span>
+          <span class="cart-total__sum" id="cartTotalSum"></span>
+        </div>
         <form id="cartForm" class="cart-form">
           <div class="cart-field">
             <input type="text" name="name" placeholder="Ваше ім'я *" class="cart-input" autocomplete="name">

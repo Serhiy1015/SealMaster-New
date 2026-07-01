@@ -2837,6 +2837,30 @@ a.product-card__cat:hover { text-decoration: underline; }
   flex-shrink: 0;
 }
 
+/* Загальна сума */
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0 18px;
+  border-bottom: 1px solid var(--clr-border);
+  margin-bottom: 16px;
+}
+.cart-total__label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--clr-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.cart-total__sum {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--clr-accent);
+}
+
 /* Форма в дравері */
 .cart-form { display: flex; flex-direction: column; gap: 10px; }
 .cart-field { display: flex; flex-direction: column; gap: 4px; }
