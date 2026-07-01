@@ -705,15 +705,6 @@ function renderProductGrid(gridEl, filtered, allProducts, noImage = false) {
     });
   });
 
-  const updateRowPrice = (body, qty) => {
-    const priceEl = body?.querySelector('.product-card__price[data-unit-price]');
-    if (!priceEl) return;
-    const unit = parseFloat(String(priceEl.dataset.unitPrice).replace(',', '.'));
-    if (!isNaN(unit)) {
-      priceEl.textContent = (unit * qty).toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' грн';
-    }
-  };
-
   gridEl.querySelectorAll('.product-card__qty-btn[data-action]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.preventDefault();
@@ -721,22 +712,14 @@ function renderProductGrid(gridEl, filtered, allProducts, noImage = false) {
       const valEl = btn.closest('.product-card__qty-wrap')?.querySelector('.product-card__qty-val');
       if (!valEl) return;
       const cur = parseInt(valEl.value, 10) || 1;
-      const newQty = btn.dataset.action === 'inc' ? cur + 1 : Math.max(1, cur - 1);
-      valEl.value = newQty;
-      updateRowPrice(btn.closest('.product-card__body'), newQty);
+      valEl.value = btn.dataset.action === 'inc' ? cur + 1 : Math.max(1, cur - 1);
     });
   });
 
   gridEl.querySelectorAll('.product-card__qty-val').forEach(input => {
-    input.addEventListener('input', e => {
-      e.stopPropagation();
-      const qty = Math.max(1, parseInt(input.value, 10) || 1);
-      updateRowPrice(input.closest('.product-card__body'), qty);
-    });
+    input.addEventListener('input', e => { e.stopPropagation(); });
     input.addEventListener('blur', () => {
-      const qty = Math.max(1, parseInt(input.value, 10) || 1);
-      input.value = qty;
-      updateRowPrice(input.closest('.product-card__body'), qty);
+      input.value = Math.max(1, parseInt(input.value, 10) || 1);
     });
     input.addEventListener('click', e => e.stopPropagation());
   });
