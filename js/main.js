@@ -573,6 +573,11 @@ function parseCordSection(name) {
 /* Build flat map: subtypeId → image from SUBCATEGORIES */
 function buildSubcatImageMap() {
   const map = {};
+  if (typeof CATEGORIES !== 'undefined') {
+    for (const cat of CATEGORIES) {
+      if (cat.image) map[cat.id] = cat.image;
+    }
+  }
   if (typeof SUBCATEGORIES === 'undefined') return map;
   for (const groups of Object.values(SUBCATEGORIES)) {
     for (const group of groups) {

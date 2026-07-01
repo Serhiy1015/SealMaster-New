@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const catPage = cat ? cat.page : 'catalog.html';
 
   const subcat  = findSubcatInfo(product.categoryId, product.subtype);
-  const imgSrc  = product.image || (subcat && subcat.image) || '';
+  const imgSrc  = product.image || (subcat && subcat.image) || (cat && cat.image) || '';
 
   document.title = product.name + ' — Sealmaster';
 
