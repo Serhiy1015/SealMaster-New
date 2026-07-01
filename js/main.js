@@ -1183,6 +1183,14 @@ async function buildCatalog(preloadedProducts) {
       gridEl.parentNode.insertBefore(pageHeroEl1, gridEl);
     }
 
+    const catObj1 = (typeof CATEGORIES !== 'undefined') ? CATEGORIES.find(c => c.id === catId) : null;
+    if (catObj1 && catObj1.desc) {
+      const descEl = document.createElement('p');
+      descEl.className = 'catalog-page__desc';
+      descEl.textContent = catObj1.desc;
+      pageHeroTextEl1.appendChild(descEl);
+    }
+
     const tabsBar = document.createElement('div');
     tabsBar.className = 'subtype-tabs subtype-tabs--l2';
     pageHeroTextEl1.appendChild(tabsBar);

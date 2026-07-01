@@ -40,7 +40,7 @@ const CATEGORIES = [
   { id: 'rotatsiyni',     name: 'Ротаційні ущільнення',             page: 'rotatsiyni.html' , image: 'images/categories/rotatsiyni.JPG' },
   { id: 'kompresory',     name: 'Компресорні комплектуючі',         page: 'kompresory.html',    image: 'images/categories/kompr.JPG' },
   { id: 'robotyzovani',   name: 'Ущільнення роботизованих КП',      page: 'robotyzovani.html',  image: 'images/categories/kaset.JPG' },
-  { id: 'manzhety',       name: 'Манжети армовані',                 page: 'manzhety.html',      image: 'images/categories/corteco.JPG' },
+  { id: 'manzhety',       name: 'Манжети армовані',                 page: 'manzhety.html',      image: 'images/categories/corteco.JPG', desc: 'Тискові для гідронасосів, гідромоторів, редукторні, спеціального призначення' },
   { id: 'remkomplekty',   name: 'Ремкомплекти',                     page: 'remkomplekty.html',  image: 'images/categories/remkomp.JPG' },
   { id: 'komplektuiuchi', name: 'Комплектуючі ГЦ',                  page: 'komplektuiuchi.html', image: 'images/categories/pidsh.JPG' },
 ];
