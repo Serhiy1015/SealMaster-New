@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const top = target.getBoundingClientRect().top + window.scrollY;
         const center = top - window.innerHeight / 2 + target.offsetHeight / 2;
         window.scrollTo({ top: center, behavior: 'smooth' });
+      } else {
+        window.location.href = 'index.html#dim-filter';
       }
     });
   }
@@ -754,6 +756,16 @@ function renderProductGrid(gridEl, filtered, allProducts, noImage = false) {
 function initHomeDimSearch(allProducts) {
   initSealSearch(allProducts);
   initRingSearch(allProducts);
+
+  if (location.hash === '#dim-filter') {
+    setTimeout(() => {
+      const target = document.querySelector('.dim-filter');
+      if (target) {
+        const top = target.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: top - window.innerHeight / 2 + target.offsetHeight / 2, behavior: 'smooth' });
+      }
+    }, 150);
+  }
 }
 
 function initSealSearch(allProducts) {
