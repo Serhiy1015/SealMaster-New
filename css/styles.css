@@ -2093,11 +2093,12 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 
 .catalog-page__desc {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
+  font-weight: 500;
   font-size: 0.875rem;
   color: var(--clr-text-dim);
   max-width: 600px; margin-bottom: 0;
-  line-height: 1.6; letter-spacing: 0.02em;
+  line-height: 1.6; letter-spacing: 0;
 }
 
 /* ---- SUBTYPE TABS ---- */
