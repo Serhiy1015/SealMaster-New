@@ -1533,10 +1533,10 @@ a.product-card__cat:hover { text-decoration: underline; }
   font-size: clamp(1.2rem, 2.2vw, 1.6rem);
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
 .product-detail__desc {
-  font-size: 0.95rem;
+  font-size: 1.25rem;
   color: var(--clr-fg-muted);
   line-height: 1.7;
   margin-bottom: 28px;
