@@ -23,8 +23,9 @@ function cartSave(cart) { localStorage.setItem('sm_cart', JSON.stringify(cart));
 function cartAdd(product, qty = 1) {
   const cart = cartGet();
   const ex = cart.find(i => i.id === product.id);
+  const price = product.categoryId === 'kilcia' ? null : product.price;
   if (ex) ex.qty = (ex.qty || 1) + qty;
-  else cart.push({ id: product.id, name: product.name, price: product.price, qty });
+  else cart.push({ id: product.id, name: product.name, price, qty });
   cartSave(cart);
   cartUpdateBadge();
   cartUpdateButtons();
