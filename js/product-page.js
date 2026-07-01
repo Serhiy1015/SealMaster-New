@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       `<span>${escHtml(product.name)}</span>`;
   }
 
-  const priceVal  = product.price ? formatPrice(product.price) : null;
+  const priceVal  = (product.price && product.categoryId !== 'kilcia') ? formatPrice(product.price) : null;
   const priceHTML = priceVal
     ? `<p class="product-detail__price">${priceVal}</p>`
     : `<p class="product-detail__price product-detail__price--ask">Ціна за запитом</p>`;
