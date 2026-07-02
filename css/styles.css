@@ -1152,7 +1152,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   line-height: 1.2;
 }
 
-.product-card__desc { font-size: 0.82rem; color: var(--clr-text-dim); line-height: 1.5; flex: 1; }
+.product-card__desc { font-size: 1rem; color: #ffffff; line-height: 1.5; flex: 1; }
 
 .product-card__footer {
   display: flex;
@@ -2108,11 +2108,11 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 
 .subtype-tab {
-  padding: 8px 18px;
+  padding: 8px 22px;
   background: var(--clr-surface);
   border: none;
   font-family: var(--font-display);
-  font-size: 0.85rem; font-weight: 600;
+  font-size: 1.2rem; font-weight: 600;
   letter-spacing: .06em; text-transform: uppercase;
   color: var(--clr-text-dim);
   cursor: pointer;
@@ -2140,7 +2140,7 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 .dim-filter__title {
   font-family: var(--font-display);
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -2156,7 +2156,7 @@ a.product-card__cat:hover { text-decoration: underline; }
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
+  padding: 10px 30px;
   background: var(--clr-surface2);
   border: 1px solid var(--clr-border);
   border-radius: 999px;
@@ -2170,7 +2170,7 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 .dim-pill__key {
   font-family: var(--font-display);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: var(--clr-accent);
   text-transform: uppercase;
@@ -2178,7 +2178,7 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 .dim-pill__name {
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: 0.9rem;
   color: var(--clr-text-dim);
   text-transform: lowercase;
 }
@@ -2198,7 +2198,7 @@ a.product-card__cat:hover { text-decoration: underline; }
 .dim-pill__input::-webkit-outer-spin-button { display: none; }
 .dim-pill__unit {
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: 0.9rem;
   color: var(--clr-text-dim);
 }
 .dim-filter__count {
