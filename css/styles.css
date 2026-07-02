@@ -1553,8 +1553,18 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 .product-detail__actions {
   display: flex;
+  align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+.pd-qty {
+  display: flex;
+  align-items: center;
+}
+.pd-qty .product-card__qty-val {
+  width: 52px;
+  font-size: 1rem;
+  height: 44px;
 }
 .product-detail__add--done { background: var(--clr-surface2) !important; color: var(--clr-fg) !important; }
 

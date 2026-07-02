@@ -135,6 +135,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         ${desc ? `<p class="product-detail__desc">${escHtml(desc)}</p>` : ''}
         ${priceHTML}
         <div class="product-detail__actions">
+          <div class="product-card__qty-wrap pd-qty">
+            <button class="product-card__qty-btn" id="pdQtyDec" type="button">−</button>
+            <input type="number" class="product-card__qty-val" id="pdQtyVal" value="1" min="1">
+            <button class="product-card__qty-btn" id="pdQtyInc" type="button">+</button>
+          </div>
           <button class="btn btn--primary" id="pdAddCart">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
             В кошик
@@ -157,6 +162,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  // Qty stepper
+  const qtyVal = document.getElementById('pdQtyVal');
+  document.getElementById('pdQtyDec')?.addEventListener('click', () => {
+    qtyVal.value = Math.max(1, (parseInt(qtyVal.value) || 1) - 1);
+  });
+  document.getElementById('pdQtyInc')?.addEventListener('click', () => {
+    qtyVal.value = (parseInt(qtyVal.value) || 1) + 1;
+  });
+  if (qtyVal) {
+    qtyVal.addEventListener('blur', () => { qtyVal.value = Math.max(1, parseInt(qtyVal.value) || 1); });
+  }
+
   // Add to cart
   const addBtn = document.getElementById('pdAddCart');
   if (addBtn && typeof cartAdd === 'function') {
@@ -177,7 +194,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (typeof cartGet === 'function' && cartGet().some(i => i.id === product.id)) {
         if (typeof cartRemove === 'function') cartRemove(product.id);
       } else {
-        cartAdd(product);
+        const qty = Math.max(1, parseInt(qtyVal?.value) || 1);
+        cartAdd(product, qty);
       }
       updateBtn();
       if (typeof cartUpdateButtons === 'function') cartUpdateButtons();
