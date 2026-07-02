@@ -162,11 +162,17 @@ function cartRenderItems() {
 /* ── Telegram ────────────────────────────────────────────── */
 async function cartSend(name, phone, comment) {
   const cart = cartGet();
-  const fmt = (p) => (!p ? '' : (/грн|₴|\$|€/.test(p) ? p : p + ' грн'));
-  const lines = cart.map(i =>
-    `• ${i.name}${i.qty > 1 ? ` × ${i.qty}` : ''}${i.price ? ' — ' + fmt(i.price) : ''}`
-  ).join('\n');
-  const text = `🛒 Нове замовлення SealMaster\n\n👤 ${name}\n📞 ${phone}${comment ? '\n💬 ' + comment : ''}\n\n${lines}`;
+  const parseNum = (p) => { if (!p) return null; const n = parseFloat(String(p).replace(/[^\d.,]/g, '').replace(',', '.')); return isNaN(n) ? null : n; };
+  const fmtPrice = (p) => (!p ? '' : (/грн|₴|\$|€/.test(p) ? p : p + ' грн'));
+  const lines = cart.map(i => {
+    const n = parseNum(i.price);
+    const lineTotal = n !== null ? (n * (i.qty || 1)).toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' грн' : null;
+    return `• ${i.name}${i.qty > 1 ? ` × ${i.qty}` : ''}${lineTotal ? ' — ' + lineTotal : ''}`;
+  }).join('\n');
+  const total = cart.reduce((sum, i) => { const n = parseNum(i.price); return n !== null ? sum + n * (i.qty || 1) : sum; }, 0);
+  const hasTotal = cart.some(i => parseNum(i.price) !== null);
+  const totalLine = hasTotal ? `\n💰 Разом: ${total.toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} грн` : '';
+  const text = `🛒 Нове замовлення SealMaster\n\n👤 ${name}\n📞 ${phone}${comment ? '\n💬 ' + comment : ''}\n\n${lines}${totalLine}`;
 
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
     console.warn('Telegram не налаштовано — токен або chat_id порожній');
