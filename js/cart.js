@@ -107,6 +107,8 @@ function cartRenderItems() {
   const cart = cartGet();
   if (!cart.length) {
     el.innerHTML = '<p class="cart-empty">Кошик порожній</p>';
+    const totalEl = document.getElementById('cartTotal');
+    if (totalEl) totalEl.hidden = true;
     return;
   }
   const parseNum = (p) => {
