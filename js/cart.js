@@ -282,6 +282,8 @@ function initCart() {
       submitBtn.textContent = 'Відправлено';
       cartClear();
       cartRenderItems();
+      const totalEl = document.getElementById('cartTotal');
+      if (totalEl) totalEl.hidden = true;
       form.hidden = true;
       document.getElementById('cartSuccess').hidden = false;
     } else {
