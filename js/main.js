@@ -620,7 +620,7 @@ function renderSearchRows(listEl, filtered, allProducts, dims = {}) {
   })();
 
   filtered.forEach(p => {
-    const subImg = imgMap[p.subtype] || imgMap[p.categoryId] || '';
+    const subImg = p.image || imgMap[p.subtype] || imgMap[p.categoryId] || '';
     const cat = (typeof CATEGORIES !== 'undefined') ? CATEGORIES.find(c => c.id === p.categoryId) : null;
     const catName = cat ? cat.name : '';
     const priceRaw = (p.price && p.categoryId !== 'kilcia') ? p.price : null;
@@ -1592,7 +1592,7 @@ function productCardHTML(p, noImage = false, imgMap = {}) {
       ${imgHtml}
       <div class="product-card__body">
         <p class="product-card__cat">${escHtml(catName)}</p>
-        ${(()=>{ const t = imgMap[p.subtype] || imgMap[p.categoryId] || p.image || ''; return t ? `<div class="product-card__thumb"><img src="${escHtml(t)}" alt="${escHtml(p.name)}" loading="lazy"></div>` : '<div class="product-card__thumb product-card__thumb--empty"></div>'; })()}
+        ${(()=>{ const t = p.image || imgMap[p.subtype] || imgMap[p.categoryId] || ''; return t ? `<div class="product-card__thumb"><img src="${escHtml(t)}" alt="${escHtml(p.name)}" loading="lazy"></div>` : '<div class="product-card__thumb product-card__thumb--empty"></div>'; })()}
         <h3 class="product-card__name">${escHtml(p.name)}</h3>
         ${p.desc ? `<p class="product-card__desc">${escHtml(p.desc)}</p>` : ''}
         <span class="product-card__leader" aria-hidden="true"></span>
