@@ -500,12 +500,8 @@ function parseCSV(text) {
     .map(row => {
       const obj = { ...row, id: parseInt(row.id, 10) || 0 };
       if (obj.name) obj.name = obj.name.replace(/\bMM\b/g, 'мм');
-      if (obj.image && !obj.image.startsWith('http')) {
-        if (obj.image.startsWith('images/')) {
-          obj.image = `https://raw.githubusercontent.com/Serhiy1015/SealMaster-New/main/${obj.image}`;
-        } else {
-          obj.image = `https://drive.google.com/thumbnail?id=${obj.image}&sz=w800`;
-        }
+      if (obj.image && !obj.image.startsWith('http') && !obj.image.startsWith('images/')) {
+        obj.image = `https://drive.google.com/thumbnail?id=${obj.image}&sz=w800`;
       }
       return obj;
     });
