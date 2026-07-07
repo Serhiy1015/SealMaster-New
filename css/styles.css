@@ -2568,8 +2568,9 @@ a.product-card__cat:hover { text-decoration: underline; }
   .container { padding: 0 16px; }
 
   .hero { padding: 40px 0 36px; }
-  .hero__title { font-size: clamp(2rem, 8vw, 3rem); }
-  .hero__desc { font-size: 0.9rem; }
+  .hero__title { font-size: clamp(1.5rem, 6.5vw, 2rem); }
+  .hero__hint { font-size: 0.95rem; }
+  .hero__desc { font-size: 0.85rem; }
   .hero__actions { flex-direction: column; }
   .hero__actions .btn { width: 100%; justify-content: center; }
 
