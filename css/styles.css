@@ -2413,7 +2413,8 @@ a.product-card__cat:hover { text-decoration: underline; }
 
   .burger { display: flex; }
   .header__cta { display: none; }
-  .cart-btn { margin-right: 12px; }
+  .cart-btn { margin-right: 12px; padding: 8px 12px; }
+  .cart-btn__label { display: none; }
 
   .nav { display: none !important; }
 
