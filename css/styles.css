@@ -2955,5 +2955,8 @@ a.product-card__cat:hover { text-decoration: underline; }
 .cart-success p { font-size: 1rem; line-height: 1.6; }
 
 @media (max-width: 480px) {
-  .cart-drawer__panel { max-width: 100%; }
+  .cart-drawer__panel { max-width: calc(100% - 40px); }
+  .cart-drawer__head,
+  .cart-drawer__items,
+  .cart-drawer__foot { padding-left: 20px; padding-right: 20px; }
 }
