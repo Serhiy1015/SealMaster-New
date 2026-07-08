@@ -501,7 +501,7 @@ function parseCSV(text) {
       const obj = { ...row, id: parseInt(row.id, 10) || 0 };
       if (obj.name) obj.name = obj.name.replace(/\bMM\b/g, 'мм');
       if (obj.image && !obj.image.startsWith('http') && !obj.image.startsWith('images/')) {
-        obj.image = `https://drive.google.com/thumbnail?id=${obj.image}&sz=w800`;
+        obj.image = `https://lh3.googleusercontent.com/d/${obj.image}=w800`;
       }
       return obj;
     });
@@ -511,7 +511,7 @@ async function loadProducts() {
   const url = typeof SHEETS_CSV_URL !== 'undefined' ? SHEETS_CSV_URL : '';
   if (!url) return typeof PRODUCTS !== 'undefined' ? PRODUCTS : [];
 
-  const CACHE_KEY = 'products_csv_v9';
+  const CACHE_KEY = 'products_csv_v10';
   const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 години
 
   // Спробуємо взяти з localStorage
