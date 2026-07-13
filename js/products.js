@@ -35,7 +35,7 @@ const CATEGORIES = [
   { id: 'gidro',          name: 'Ущільнення для гідроциліндрів',    page: 'gidro.html' },
   { id: 'pnevmo',         name: 'Ущільнення для пневмоциліндрів',   page: 'pnevmo.html' },
   { id: 'kilcia',         name: 'Кільця ущільнюючі',                page: 'kilcia.html' },
-  { id: 'vtulky',         name: 'Втулки направляючі',               page: 'vtulky.html', image: 'images/categories/vtylku.JPG' },
+  { id: 'vtulky',         name: 'Втулки направляючі',         },
   { id: 'statychni',      name: 'Статичні ущільнення',              page: 'statychni.html' },
   { id: 'rotatsiyni',     name: 'Ротаційні ущільнення',             page: 'rotatsiyni.html' , image: 'images/categories/rotatsiyni.JPG' },
   { id: 'kompresory',     name: 'Компресорні комплектуючі',         page: 'kompresory.html',    image: 'images/categories/kompr.JPG' },
@@ -233,13 +233,13 @@ const SUBCATEGORIES = {
   ],
 
   vtulky: [
-    { id: 'vtl_vk1',    name: 'ВК-1',     short: 'ВК-1',     image: 'images/categories/vtylku.JPG' },
-    { id: 'vtl_vk2',    name: 'ВК-2',     short: 'ВК-2',     image: 'images/categories/vtylku.JPG' },
-    { id: 'vtl_e60',    name: 'E60',      short: 'E60',      image: 'images/categories/vtylku.JPG' },
-    { id: 'vtl_e90',    name: 'E90',      short: 'E90',      image: 'images/categories/vtylku.JPG' },
-    { id: 'vtl_e92',    name: 'E92',      short: 'E92',      image: 'images/categories/vtylku.JPG' },
-    { id: 'vtl_hrc',    name: 'HRC',      short: 'HRC',      image: 'images/categories/vtylku.JPG' },
-    { id: 'vtl_eb6501', name: 'EB65.01',  short: 'EB65.01',  image: 'images/categories/vtylku.JPG' },
+    { id: 'vtl_vk1',    name: 'ВК-1',     short: 'ВК-1',     image: 'images/categories/vtl_vk1.JPG' },
+    { id: 'vtl_vk2',    name: 'ВК-2',     short: 'ВК-2',     image: 'images/categories/vtl_vk2.JPG' },
+    { id: 'vtl_e60',    name: 'E60',      short: 'E60',      image: 'images/categories/vtl_e60.JPG' },
+    { id: 'vtl_e90',    name: 'E90',      short: 'E90',      image: 'images/categories/vtl_e90.JPG' },
+    { id: 'vtl_e92',    name: 'E92',      short: 'E92',      image: 'images/categories/vtl_e92.JPG' },
+    { id: 'vtl_hrc',    name: 'HRC',      short: 'HRC',      image: 'images/categories/vtl_hrc.JPG' },
+    { id: 'vtl_eb6501', name: 'EB65.01',  short: 'EB65.01',  image: 'images/categories/vtl_eb6501.JPG' },
   ]
 };
 
