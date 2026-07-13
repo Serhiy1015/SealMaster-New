@@ -39,7 +39,7 @@ const CATEGORIES = [
   { id: 'statychni',      name: 'Статичні ущільнення',              page: 'statychni.html' },
   { id: 'rotatsiyni',     name: 'Ротаційні ущільнення',             page: 'rotatsiyni.html' , image: 'images/categories/rotatsiyni.JPG' },
   { id: 'kompresory',     name: 'Компресорні комплектуючі',         page: 'kompresory.html',    image: 'images/categories/kompr.JPG' },
-  { id: 'robotyzovani',   name: 'Ущільнення роботизованих КП',      page: 'robotyzovani.html',  image: 'images/categories/kaset.JPG' },
+  { id: 'robotyzovani',   name: 'Ущільнення роботизованих КП',      page: 'robotyzovani.html',  image: 'images/categories/robot.JPG' },
   { id: 'manzhety',       name: 'Манжети армовані',                 page: 'manzhety.html',      image: 'images/categories/corteco.JPG', desc: 'Тискові для гідронасосів, гідромоторів, редукторні, спеціального призначення' },
   { id: 'remkomplekty',   name: 'Ремкомплекти',                     page: 'remkomplekty.html',  image: 'images/categories/remkomp.JPG' },
   { id: 'komplektuiuchi', name: 'Комплектуючі ГЦ',                  page: 'komplektuiuchi.html', image: 'images/categories/pidsh.JPG' },
@@ -81,7 +81,7 @@ const SUBCATEGORIES = {
       // image: 'images/categories/manzhety.jpg',
       children: [
         { id: 'k21',   name: 'МАНЖЕТИ УНІВЕРСАЛЬНІ K21',  short: 'K21', image: 'images/categories/k21.jpg'},
-        { id: 'k22',   name: 'МАНЖЕТИ ШТОКОВІ K22',      short: 'K22',   image: 'images/categories/K22_1.JPG' },
+        { id: 'k22',   name: 'МАНЖЕТИ ШТОКОВІ K22',      short: 'K22',   image: 'images/categories/k22.JPG' },
         { id: 'k23',   name: 'МАНЖЕТИ ПОРШНЕВІ K23',      short: 'K23',   image: 'images/categories/k23.JPG' },
         { id: 'k31',   name: 'МАНЖЕТИ ШТОКОВІ K31',      short: 'K31',   image: 'images/categories/k31.JPG' },
         { id: 'k32',   name: 'МАНЖЕТИ ШТОКОВІ K32',      short: 'K32',   image: 'images/categories/k32.JPG' },
@@ -102,7 +102,7 @@ const SUBCATEGORIES = {
       children: [
         { id: 'bud_k09_k05', name: 'БРУДОЗНІМАЧІ K09/K05/WWS', short: 'K09/K05/WWS', image: 'images/categories/k05.JPG' },
         { id: 'bud_k06',  name: 'БРУДОЗНІМАЧІ K06',  short: 'K06' , image: 'images/categories/k06.JPG'  },
-        { id: 'bud_k07',  name: 'БРУДОЗНІМАЧІ K07',  short: 'K07', image: 'images/categories/k07.JPG'  },
+        { id: 'bud_k07',  name: 'БРУДОЗНІМАЧІ K07',  short: 'K07', image: 'images/categories/k07_wpm.jpg'  },
         { id: 'bud_k10',  name: 'БРУДОЗНІМАЧІ K10', short: 'K10' , image: 'images/categories/k10.JPG' },
         { id: 'bud_k12',  name: 'БРУДОЗНІМАЧІ K12',  short: 'K12', image: 'images/categories/k12.JPG'  },
         { id: 'bud_k101', name: 'БРУДОЗНІМАЧІ K101', short: 'K101', image: 'images/categories/k101.JPG' },
@@ -213,7 +213,7 @@ const SUBCATEGORIES = {
 
   kompresory: [
     { id: 'komp_usch', name: 'КОМПРЕСОРНІ УЩІЛЬНЕННЯ',  image: 'images/categories/kompr.JPG' },
-    { id: 'brs',       name: 'ВТУЛКИ КОМПРЕСОРНІ BRS',        },
+    { id: 'brs',       name: 'ВТУЛКИ КОМПРЕСОРНІ BRS', image: 'images/categories/brs.JPG'       },
   ],
 
   remkomplekty: [
