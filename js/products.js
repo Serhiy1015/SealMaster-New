@@ -230,6 +230,16 @@ const SUBCATEGORIES = {
     { id: 'kompl_vuho_truba', name: 'ВУХО ГЦ ТРУБА',   short: 'Вухо труба',  image: 'images/categories/vtruba.JPG'    },
     { id: 'kompl_khrom',      name: 'ШТОКИ ХРОМОВАНІ', short: 'Штоки'         },
     { id: 'kompl_trubu',      name: 'ТРУБИ ХОНІНГОВАНІ', short: 'Труби'        },
+  ],
+
+  vtulky: [
+    { id: 'vtl_vk1',    name: 'ВК-1',     short: 'ВК-1',     image: 'images/categories/vtylku.JPG' },
+    { id: 'vtl_vk2',    name: 'ВК-2',     short: 'ВК-2',     image: 'images/categories/vtylku.JPG' },
+    { id: 'vtl_e60',    name: 'E60',      short: 'E60',      image: 'images/categories/vtylku.JPG' },
+    { id: 'vtl_e90',    name: 'E90',      short: 'E90',      image: 'images/categories/vtylku.JPG' },
+    { id: 'vtl_e92',    name: 'E92',      short: 'E92',      image: 'images/categories/vtylku.JPG' },
+    { id: 'vtl_hrc',    name: 'HRC',      short: 'HRC',      image: 'images/categories/vtylku.JPG' },
+    { id: 'vtl_eb6501', name: 'EB65.01',  short: 'EB65.01',  image: 'images/categories/vtylku.JPG' },
   ]
 };
 

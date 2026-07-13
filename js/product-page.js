@@ -28,6 +28,11 @@ const SUBTYPE_LABELS = {
   manzh_combi: 'Манжета армована', manzh_corteco: 'Манжета армована',
   manzh_dmhui: 'Манжета армована', manzh_sog: 'Манжета армована',
   manzh_kasety: 'Касета',
+  // vtulky
+  vtl_vk1: 'Втулка направляюча', vtl_vk2: 'Втулка направляюча',
+  vtl_e60: 'Втулка направляюча', vtl_e90: 'Втулка направляюча',
+  vtl_e92: 'Втулка направляюча', vtl_hrc: 'Втулка направляюча',
+  vtl_eb6501: 'Втулка направляюча',
   // kompresory
   komp_usch: 'Ущільнення компресорне', brs: 'Втулка компресорна',
   // remkomplekty
@@ -40,7 +45,6 @@ const SUBTYPE_LABELS = {
 
 // Категорії без підкатегорій → тип
 const CATEGORY_LABELS = {
-  vtulky:       'Втулка',
   rotatsiyni:   'Ротаційне ущільнення',
   robotyzovani: 'Ущільнення КП',
 };
