@@ -1,6 +1,6 @@
 // Гідро: L1-групи → тип у однині
 const GROUP_TYPE_LABELS = {
-  manzhety:       'Манжета',
+  manzhety:       'Манжета гідравлічна',
   budoznymachi:   'Брудознімач',
   shtok:          'Ущільнення штока',
   porshni:        'Ущільнення поршня',
