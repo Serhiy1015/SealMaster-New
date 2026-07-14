@@ -35,7 +35,7 @@ const CATEGORIES = [
   { id: 'gidro',          name: 'Ущільнення для гідроциліндрів',    page: 'gidro.html' },
   { id: 'pnevmo',         name: 'Ущільнення для пневмоциліндрів',   page: 'pnevmo.html' },
   { id: 'kilcia',         name: 'Кільця ущільнюючі',                page: 'kilcia.html' },
-  { id: 'vtulky',         name: 'Втулки направляючі',         },
+  { id: 'vtulky',         name: 'Втулки направляючі',               page: 'vtulky.html', image: 'images/categories/vtylku.JPG' },
   { id: 'statychni',      name: 'Статичні ущільнення',              page: 'statychni.html' },
   { id: 'rotatsiyni',     name: 'Ротаційні ущільнення',             page: 'rotatsiyni.html' , image: 'images/categories/rotatsiyni.JPG' },
   { id: 'kompresory',     name: 'Компресорні комплектуючі',         page: 'kompresory.html',    image: 'images/categories/kompr.JPG' },
