@@ -2292,8 +2292,8 @@ a.product-card__cat:hover { text-decoration: underline; }
   gap: 14px;
 }
 .no-results-suggest__msg {
-  font-size: 0.95rem;
-  color: var(--clr-text-dim);
+  font-size: 1.1rem;
+  color: var(--clr-text);
   margin: 0;
 }
 .no-results-suggest__btns {
