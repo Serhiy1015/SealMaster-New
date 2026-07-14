@@ -2283,50 +2283,6 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 .dim-filter__reset:hover { color: var(--clr-accent2); }
 
-/* ---- SUBCAT SEARCH ---- */
-.subcat-search {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  background: var(--clr-surface);
-  border-left: 3px solid var(--clr-accent);
-  border-radius: 0 6px 6px 0;
-  margin-bottom: 12px;
-}
-.subcat-search[hidden] { display: none !important; }
-.subcat-search__icon { flex-shrink: 0; color: var(--clr-text-dim); }
-.subcat-search__input {
-  flex: 1;
-  background: none;
-  border: none;
-  outline: none;
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  color: var(--clr-heading);
-  min-width: 0;
-}
-.subcat-search__input::placeholder { color: var(--clr-text-dim); }
-.subcat-search__clear {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--clr-text-dim);
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  transition: color var(--transition);
-}
-.subcat-search__clear:hover { color: var(--clr-accent2); }
-.subcat-search__clear[hidden] { display: none !important; }
-.subcat-search-results {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 24px;
-}
-.subcat-search-results[hidden] { display: none !important; }
-
 .catalog__grid--l1groups {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
