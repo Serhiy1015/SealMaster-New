@@ -1050,12 +1050,15 @@ async function buildCatalog(preloadedProducts) {
         return null;
       };
 
+      let subcatSearch = null;
+
       const showL1Groups = () => {
         l1Label.hidden = true;
         bannerWrapEl.hidden = true;
         l2Bar.hidden = true;
         resultsBarEl.hidden = true;
         filterEl.hidden = true;
+        if (subcatSearch) subcatSearch.hide();
         resetDimFilter();
         const l1Sep = document.getElementById('breadcrumbL1Sep');
         const l1Bc  = document.getElementById('breadcrumbL1');
@@ -1085,6 +1088,7 @@ async function buildCatalog(preloadedProducts) {
         l2Bar.hidden = false;
         filterEl.hidden = false;
         resultsBarEl.hidden = false;
+        if (subcatSearch) { subcatSearch.clear(); subcatSearch.show(); }
         l1Label.textContent = activeGroup.name;
         const l1Sep = document.getElementById('breadcrumbL1Sep');
         const l1Bc  = document.getElementById('breadcrumbL1');
@@ -1118,6 +1122,27 @@ async function buildCatalog(preloadedProducts) {
       resultsBarEl.className = 'results-bar';
       resultsBarEl.hidden = true;
       pageHeroTextEl.appendChild(resultsBarEl);
+
+      subcatSearch = initSubcatSearch({
+        pageHeroTextEl,
+        anchorEl: l2Bar,
+        gridEl,
+        tabsBar: l2Bar,
+        dimFilterEl: filterEl,
+        resultsBarEl,
+        filterProducts: q => {
+          if (!activeGroup) return [];
+          const childIds = new Set((activeGroup.children || []).map(c => c.id));
+          return products.filter(p => p.categoryId === catId && childIds.has(p.subtype) && p.name.toLowerCase().includes(q));
+        },
+        getSubcatName: p => {
+          if (!activeGroup) return '';
+          const child = (activeGroup.children || []).find(c => c.id === p.subtype);
+          return child ? child.name : '';
+        },
+        allProducts: products,
+      });
+      subcatSearch.hide();
 
       function renderProducts() {
         let filtered = products.filter(p => p.categoryId === catId && p.subtype === activeChild);
@@ -1310,6 +1335,20 @@ async function buildCatalog(preloadedProducts) {
     const resultsBarEl = document.createElement('div');
     resultsBarEl.className = 'results-bar';
     pageHeroTextEl1.appendChild(resultsBarEl);
+
+    if (catId !== 'kilcia') {
+      initSubcatSearch({
+        pageHeroTextEl: pageHeroTextEl1,
+        anchorEl: tabsBar,
+        gridEl,
+        tabsBar,
+        dimFilterEl: noFilter ? null : dimFilterEl,
+        resultsBarEl,
+        filterProducts: q => products.filter(p => p.categoryId === catId && p.name.toLowerCase().includes(q)),
+        getSubcatName: p => { const s = subcats.find(sc => sc.id === p.subtype); return s ? s.name : ''; },
+        allProducts: products,
+      });
+    }
 
     gridEl.className = 'catalog__grid catalog__grid--list';
     updateBanner1(subcats.find(s => s.id === activeSubtype));
@@ -1674,6 +1713,114 @@ function escHtml(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+/* ============================================================
+   CROSS-SUBCAT SEARCH
+   ============================================================ */
+function initSubcatSearch({ pageHeroTextEl, anchorEl, gridEl, tabsBar, dimFilterEl, resultsBarEl, filterProducts, getSubcatName, allProducts }) {
+  const wrapEl = document.createElement('div');
+  wrapEl.className = 'subcat-search';
+  wrapEl.innerHTML = `
+    <svg class="subcat-search__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input class="subcat-search__input" type="text" placeholder="Пошук за розміром або назвою..." autocomplete="off">
+    <button class="subcat-search__clear" hidden aria-label="Очистити" type="button">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>`;
+
+  if (anchorEl) pageHeroTextEl.insertBefore(wrapEl, anchorEl);
+  else pageHeroTextEl.appendChild(wrapEl);
+
+  const resultsEl = document.createElement('div');
+  resultsEl.className = 'subcat-search-results';
+  resultsEl.hidden = true;
+  gridEl.parentNode.insertBefore(resultsEl, gridEl);
+
+  const input    = wrapEl.querySelector('.subcat-search__input');
+  const clearBtn = wrapEl.querySelector('.subcat-search__clear');
+  const imgMap   = buildSubcatImageMap();
+
+  const restore = () => {
+    resultsEl.hidden = true;
+    gridEl.hidden = false;
+    if (tabsBar)     tabsBar.hidden     = false;
+    if (dimFilterEl) dimFilterEl.hidden = false;
+    if (resultsBarEl) resultsBarEl.hidden = false;
+  };
+
+  const doSearch = q => {
+    if (tabsBar)     tabsBar.hidden     = true;
+    if (dimFilterEl) dimFilterEl.hidden = true;
+    if (resultsBarEl) resultsBarEl.hidden = true;
+    gridEl.hidden = true;
+    resultsEl.hidden = false;
+
+    const hits = sortByInnerD(filterProducts(q));
+    if (!hits.length) {
+      resultsEl.innerHTML = '<p class="catalog__loading">Нічого не знайдено. <a href="tel:+380685740961">Зателефонуйте нам</a> — підберемо індивідуально.</p>';
+      return;
+    }
+
+    resultsEl.innerHTML = '';
+    hits.forEach(p => {
+      const subImg     = p.image || imgMap[p.subtype] || imgMap[p.categoryId] || '';
+      const subcatName = getSubcatName(p);
+      const priceRaw   = (p.price && p.categoryId !== 'kilcia') ? p.price : null;
+      const price      = priceRaw
+        ? `<span class="search-row__price">${formatPrice(priceRaw)}</span>`
+        : `<span class="search-row__price search-row__price--ask">Ціна за запитом</span>`;
+
+      const row = document.createElement('a');
+      row.className = 'search-row';
+      row.href = `product.html?id=${p.id}`;
+      row.innerHTML = `
+        ${subImg
+          ? `<img class="search-row__img" src="${escHtml(subImg)}" alt="${escHtml(p.name)}" loading="lazy">`
+          : `<div class="search-row__img-ph"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`}
+        <div class="search-row__body">
+          ${subcatName ? `<span class="search-row__cat">${escHtml(subcatName)}</span>` : ''}
+          <span class="search-row__name">${escHtml(p.name)}</span>
+        </div>
+        <div class="search-row__end">
+          ${price}
+          <button class="product-card__add search-row__add" data-id="${p.id}" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            <span>В кошик</span>
+          </button>
+        </div>`;
+      resultsEl.appendChild(row);
+    });
+
+    resultsEl.querySelectorAll('.search-row__add[data-id]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        const id   = parseInt(btn.dataset.id, 10);
+        const prod = allProducts.find(pp => pp.id === id);
+        if (prod && typeof cartAdd === 'function') cartAdd(prod);
+      });
+    });
+    if (typeof cartUpdateButtons === 'function') cartUpdateButtons();
+  };
+
+  input.addEventListener('input', () => {
+    const val = input.value.trim();
+    clearBtn.hidden = !val;
+    if (!val) restore();
+    else doSearch(val.toLowerCase());
+  });
+
+  clearBtn.addEventListener('click', () => {
+    input.value = '';
+    clearBtn.hidden = true;
+    restore();
+  });
+
+  return {
+    clear: () => { input.value = ''; clearBtn.hidden = true; restore(); },
+    hide:  () => { wrapEl.hidden = true; resultsEl.hidden = true; gridEl.hidden = false; },
+    show:  () => { wrapEl.hidden = false; },
+  };
 }
 
 /* ============================================================
