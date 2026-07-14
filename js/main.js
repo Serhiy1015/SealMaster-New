@@ -511,7 +511,7 @@ async function loadProducts() {
   const url = typeof SHEETS_CSV_URL !== 'undefined' ? SHEETS_CSV_URL : '';
   if (!url) return typeof PRODUCTS !== 'undefined' ? PRODUCTS : [];
 
-  const CACHE_KEY = 'products_csv_v10';
+  const CACHE_KEY = 'products_csv_v11';
   const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 години
 
   // Спробуємо взяти з localStorage
