@@ -1138,6 +1138,43 @@ async function buildCatalog(preloadedProducts) {
           if (inp) inp.closest('.dim-pill')?.classList.toggle('dim-pill--active', inp.value !== '');
         });
         resultsBarEl.innerHTML = `<span class="results-bar__num">${filtered.length}</span><span class="results-bar__label">${hasFilter ? 'знайдено' : 'позицій'}</span>`;
+
+        if (!filtered.length && hasFilter) {
+          const siblings = (activeGroup.children || []).filter(c => c.id !== activeChild);
+          const suggestions = siblings
+            .map(child => ({
+              child,
+              count: products.filter(p => {
+                if (p.categoryId !== catId || p.subtype !== child.id) return false;
+                const dims = parseDims(p.name);
+                if (!dims) return false;
+                if (!isNaN(d) && dims.d !== d) return false;
+                if (!isNaN(D) && dims.D !== D) return false;
+                if (!isNaN(h) && dims.h !== h) return false;
+                return true;
+              }).length,
+            }))
+            .filter(x => x.count > 0);
+
+          if (suggestions.length) {
+            gridEl.innerHTML = `<div class="no-results-suggest">
+              <p class="no-results-suggest__msg">У цій підкатегорії не знайдено. Цей розмір є в:</p>
+              <div class="no-results-suggest__btns">
+                ${suggestions.map(x => `<button class="btn btn--primary no-results-suggest__btn" data-goto="${escHtml(x.child.id)}">${escHtml(x.child.short || x.child.name)}<span class="no-results-suggest__count">${x.count}</span></button>`).join('')}
+              </div>
+            </div>`;
+            gridEl.querySelectorAll('.no-results-suggest__btn').forEach(btn => {
+              btn.addEventListener('click', () => {
+                activeChild = btn.dataset.goto;
+                updateBanner();
+                renderL2();
+                renderProducts();
+              });
+            });
+            return;
+          }
+        }
+
         renderProductGrid(gridEl, filtered, products, true);
       }
 
@@ -1360,6 +1397,48 @@ async function buildCatalog(preloadedProducts) {
       }
 
       resultsBarEl.innerHTML = `<span class="results-bar__num">${filtered.length}</span><span class="results-bar__label">${hasFilter ? 'знайдено' : 'позицій'}</span>`;
+
+      if (!filtered.length && hasFilter && !isKilcia) {
+        const d = parseFloat(document.getElementById('subFd')?.value);
+        const D = parseFloat(document.getElementById('subFD')?.value);
+        const h = parseFloat(document.getElementById('subFh')?.value);
+        const suggestions = subcats
+          .filter(s => s.id !== activeSubtype)
+          .map(s => ({
+            sub: s,
+            count: products.filter(p => {
+              if (p.categoryId !== catId || p.subtype !== s.id) return false;
+              const dims = parseDims(p.name);
+              if (!dims) return false;
+              if (!isNaN(d) && dims.d !== d) return false;
+              if (!isNaN(D) && dims.D !== D) return false;
+              if (!isNaN(h) && dims.h !== h) return false;
+              return true;
+            }).length,
+          }))
+          .filter(x => x.count > 0);
+
+        if (suggestions.length) {
+          gridEl.innerHTML = `<div class="no-results-suggest">
+            <p class="no-results-suggest__msg">У цій підкатегорії не знайдено. Цей розмір є в:</p>
+            <div class="no-results-suggest__btns">
+              ${suggestions.map(x => `<button class="btn btn--primary no-results-suggest__btn" data-goto="${escHtml(x.sub.id)}">${escHtml(x.sub.short || x.sub.name)}<span class="no-results-suggest__count">${x.count}</span></button>`).join('')}
+            </div>
+          </div>`;
+          gridEl.querySelectorAll('.no-results-suggest__btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const sid = btn.dataset.goto;
+              tabsBar.querySelectorAll('.subtype-tab').forEach(b => b.classList.remove('subtype-tab--active'));
+              tabsBar.querySelector(`[data-subtype="${sid}"]`)?.classList.add('subtype-tab--active');
+              activeSubtype = sid;
+              updateSubFilterUI();
+              updateBanner1(subcats.find(s => s.id === sid));
+              renderProducts();
+            });
+          });
+          return;
+        }
+      }
 
       renderProductGrid(gridEl, filtered, products, true);
     }

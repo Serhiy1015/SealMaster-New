@@ -2283,6 +2283,36 @@ a.product-card__cat:hover { text-decoration: underline; }
 }
 .dim-filter__reset:hover { color: var(--clr-accent2); }
 
+/* ---- NO RESULTS SUGGEST ---- */
+.no-results-suggest {
+  grid-column: 1 / -1;
+  padding: 28px 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.no-results-suggest__msg {
+  font-size: 0.95rem;
+  color: var(--clr-text-dim);
+  margin: 0;
+}
+.no-results-suggest__btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.no-results-suggest__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.no-results-suggest__count {
+  background: rgba(0,0,0,0.15);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 0.8em;
+}
+
 .catalog__grid--l1groups {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
