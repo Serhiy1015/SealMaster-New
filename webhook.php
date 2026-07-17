@@ -18,11 +18,18 @@ if (($data['ref'] ?? '') !== 'refs/heads/main') {
 $repo = '/home/silmastercom/repositories/SealMaster-New';
 $dest = '/home/silmastercom/public_html';
 
+putenv('HOME=/home/silmastercom');
+putenv('GIT_DIR=' . $repo . '/.git');
+putenv('GIT_WORK_TREE=' . $repo);
+
 chdir($repo);
-exec('git pull origin main 2>&1', $out1, $code1);
-exec("cp -rf {$repo}/. {$dest}/ 2>&1", $out2, $code2);
+$git = trim(shell_exec('which git 2>/dev/null') ?: '/usr/bin/git');
+exec("{$git} -C {$repo} pull origin main 2>&1", $out1, $code1);
+exec("/bin/cp -rf {$repo}/. {$dest}/ 2>&1", $out2, $code2);
 
 http_response_code(200);
+echo "git: {$git}\n";
 echo "pull: " . ($code1 === 0 ? 'OK' : 'FAIL') . "\n";
 echo implode("\n", $out1) . "\n";
 echo "copy: " . ($code2 === 0 ? 'OK' : 'FAIL') . "\n";
+echo implode("\n", $out2) . "\n";
