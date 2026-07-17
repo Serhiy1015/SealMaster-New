@@ -1,0 +1,32 @@
+# ── Безпека ──────────────────────────────────────────────────
+# Забороняє показувати список файлів у папках
+Options -Indexes
+
+# ── HTTPS-редирект ───────────────────────────────────────────
+# Розкоментуй після того як SSL-сертифікат буде активний
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ── 404 ──────────────────────────────────────────────────────
+ErrorDocument 404 /index.html
+
+# ── Кешування статичних файлів ───────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg        "access plus 1 month"
+  ExpiresByType image/jpg         "access plus 1 month"
+  ExpiresByType image/png         "access plus 1 month"
+  ExpiresByType image/gif         "access plus 1 month"
+  ExpiresByType image/svg+xml     "access plus 1 month"
+  ExpiresByType image/webp        "access plus 1 month"
+  ExpiresByType image/avif        "access plus 1 month"
+  ExpiresByType text/css          "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+  ExpiresByType font/woff2        "access plus 1 year"
+</IfModule>
+
+# ── Gzip-стиснення ───────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript text/plain
+</IfModule>
