@@ -19,17 +19,21 @@ $repo = '/home/silmastercom/repositories/SealMaster-New';
 $dest = '/home/silmastercom/public_html';
 
 putenv('HOME=/home/silmastercom');
-putenv('GIT_DIR=' . $repo . '/.git');
-putenv('GIT_WORK_TREE=' . $repo);
+putenv('GIT_TERMINAL_PROMPT=0');
+putenv('GIT_ASKPASS=echo');
 
 chdir($repo);
-$git = trim(shell_exec('which git 2>/dev/null') ?: '/usr/bin/git');
-exec("{$git} -C {$repo} pull origin main 2>&1", $out1, $code1);
+exec("whoami 2>&1", $who);
+exec("timeout 30 /usr/bin/git -C {$repo} fetch origin main 2>&1", $out1f, $code1f);
+exec("timeout 30 /usr/bin/git -C {$repo} reset --hard origin/main 2>&1", $out1r, $code1r);
+$code1 = ($code1f === 0 && $code1r === 0) ? 0 : 1;
+$out1  = array_merge($out1f, $out1r);
 exec("/bin/cp -rf {$repo}/. {$dest}/ 2>&1", $out2, $code2);
 
 http_response_code(200);
-echo "git: {$git}\n";
-echo "pull: " . ($code1 === 0 ? 'OK' : 'FAIL') . "\n";
+echo "user: " . implode('', $who) . "\n";
+echo "fetch: " . ($code1f === 0 ? 'OK' : 'FAIL') . "\n";
+echo "reset: " . ($code1r === 0 ? 'OK' : 'FAIL') . "\n";
 echo implode("\n", $out1) . "\n";
 echo "copy: " . ($code2 === 0 ? 'OK' : 'FAIL') . "\n";
 echo implode("\n", $out2) . "\n";
