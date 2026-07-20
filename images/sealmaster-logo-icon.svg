@@ -17,6 +17,9 @@
     </filter>
   </defs>
 
+  <!-- Dark background -->
+  <rect x="0" y="0" width="100" height="116" fill="#0f1013"/>
+
   <!-- Bottom ellipse (thickness shadow) -->
   <ellipse cx="50" cy="83" rx="40" ry="12" fill="#5a2e04"/>
 
