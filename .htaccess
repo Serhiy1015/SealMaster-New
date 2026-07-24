@@ -2,11 +2,14 @@
 # Забороняє показувати список файлів у папках
 Options -Indexes
 
-# ── HTTPS-редирект ───────────────────────────────────────────
-# Розкоментуй після того як SSL-сертифікат буде активний
-# RewriteEngine On
-# RewriteCond %{HTTPS} off
-# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# ── Канонічний редирект: все → https://sealmaster.com.ua ─────
+RewriteEngine On
+# www → non-www
+RewriteCond %{HTTP_HOST} ^www\.sealmaster\.com\.ua [NC]
+RewriteRule ^ https://sealmaster.com.ua%{REQUEST_URI} [L,R=301]
+# HTTP → HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # ── 404 ──────────────────────────────────────────────────────
 ErrorDocument 404 /index.html
